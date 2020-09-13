@@ -39,6 +39,9 @@ public:
 
 ---------------------------------------------------------------------
 
+O(n) time
+O(1) space
+
 void sortInWave(int arr[], int n) 
 { 
     // Traverse all even elements 
