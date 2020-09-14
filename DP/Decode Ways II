@@ -1,0 +1,69 @@
+A message containing letters from A-Z is being encoded to numbers using the following mapping way:
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+Beyond that, now the encoded string can also contain the character '*', which can be treated as one of the numbers from 1 to 9.
+
+Given the encoded message containing digits and the character '*', return the total number of ways to decode it.
+
+Also, since the answer may be very large, you should return the output mod 109 + 7.
+Example 1:
+Input: "*"
+Output: 9
+Explanation: The encoded message can be decoded to the string: "A", "B", "C", "D", "E", "F", "G", "H", "I".
+
+O(n) time 
+O(n) space
+
+
+
+class Solution {
+public:
+    int cnt=0;
+   int rec(string &s ,int ind,vector<int> &vec){
+       int n=s.length();
+       if(ind == n) return 1;
+       if(s[ind] == '0') return 0;
+       
+       if(vec[ind] != -1) return vec[ind];
+       
+      int c1=0;
+       c1 = rec(s,ind+1,vec);
+       if(s[ind] == '*'){             
+           c1 = 9*c1;
+       }
+       int c2=0;
+       if(ind+1<n){
+           if(s[ind] =='*' && s[ind+1]=='*'){           // both are star  total 15 possibility
+               c2 = 15*rec(s,ind+2,vec);
+           }
+           else if(s[ind] == '1' && s[ind+1] == '*'){        // second star total 9 possibility 
+               c2 = 9*rec(s,ind+2,vec) ;
+           }
+           else if(s[ind] == '2' && s[ind+1] == '*'){          
+               c2 = 6*rec(s,ind+2,vec);
+           }
+           else if(s[ind] == '*' && s[ind+1]-'0' <= 6){
+               c2 = 2*rec(s,ind+2,vec);
+           }
+           else if(s[ind]=='1' && s[ind+1]-'0' <= 9 ){
+               c2 = rec(s,ind+2,vec);
+           }
+           else if(s[ind]=='2' && s[ind+1]-'0' <=6){
+                 c2 = rec(s,ind+2,vec);
+           }
+           else if(s[ind] == '*'){
+               c2 = rec(s,ind+2,vec);
+           }
+       }
+       return vec[ind] = (c1+c2)%1000000007;
+   }
+    int numDecodings(string s) {
+        vector<int> vec(s.length(),-1);
+        int cnt= rec(s,0,vec);
+        for(int x: vec) cout<<x<<" "; cout<<endl;
+        return cnt;
+    }
+};
