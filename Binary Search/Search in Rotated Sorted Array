@@ -1,0 +1,65 @@
+You are given an integer array nums sorted in ascending order, and an integer target.
+
+Suppose that nums is rotated at some pivot unknown to you beforehand (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
+
+If target is found in the array return its index, otherwise, return -1.
+No repeat number
+
+Example 1:
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+
+O(logn) time
+O(1) space
+
+
+class Solution {
+public:
+    int rec(vector<int>& arr,int low,int high,int k){       // simple search in sorting order in Log time 
+        if(arr[low] == k) return low;
+        if(arr[high] == k) return high;
+        
+        while(low<= high){
+            int mid = (low+high)/2;
+            if(arr[mid] == k) {
+                return mid;
+            }
+            else if(arr[mid] < k) {
+                low = mid+1;
+            }
+            else{
+                 high = mid-1;
+            }
+        }
+        return -1;
+    }
+    int search(vector<int>& arr, int k) {
+        int n = arr.size();
+        if(n==0){     
+            return -1;
+        }
+        if(n==1){
+            if(arr[0]==k) return 0;
+            else return -1;
+        }
+        int low = 0,high =n-1,loop = -1;
+        
+        while(low < high){                         // find minimum element index in  rotate array
+            int mid = (low + high)/2;
+           
+            if(arr[mid] < arr[high]){
+                high = mid;
+            }else if(arr[mid] > arr[high]){
+                low = mid+1;
+            }
+            
+        }
+        
+         loop = low;            // break the array into 2 part 
+        
+        int ans = -2;
+        if(loop > 0)ans =  rec(arr,0,loop-1,k);               // check in first part
+        if(ans ==-1 || ans== -2) ans = rec(arr,loop,n-1,k);   // check in second part
+        return ans;
+    }
+};
