@@ -1,0 +1,51 @@
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+(i.e., [0,0,1,2,2,5,6] might become [2,5,6,0,0,1,2]).
+You are given a target value to search. If found in the array return true, otherwise return false.
+
+Example 1:
+Input: nums = [2,5,6,0,0,1,2], target = 0
+Output: true
+
+Ducplicate element contain  in array
+
+O(logn) time
+O(1)  space
+
+
+class Solution {
+public:
+  
+    bool search(vector<int>& nums, int target) {
+         if(nums.size()==0) return false;
+        int t,s=0,e=nums.size()-1; 
+        
+        while(e-s>1){                                   // find the partition break in array 
+            if(e==s){
+                break;
+            }
+            if(nums[e]==nums[s]){
+                e--;
+                 continue;
+            }
+           int m= (s+e)/2; 
+            if(nums[m]<nums[s]){                    // main logic to break the array
+               e=m-1;
+            }
+            else{
+                s=m;
+            }
+        }
+        if(nums[s]>nums[e]) e--;
+        
+        
+        if(target>=nums[0]){                                                        //check in left part of partion array
+            t= lower_bound(nums.begin(),nums.begin()+e+1,target)-nums.begin();
+          if(t<nums.size()&&nums[t]==target)  return true; 
+          } 
+         else{                                                                      //  //check in right part of partion array
+             t= lower_bound(nums.begin()+e+1,nums.end(),target)-nums.begin(); 
+             if(t<nums.size()&&target==nums[t]) return true;   
+         }
+        return false;
+    }
+};
