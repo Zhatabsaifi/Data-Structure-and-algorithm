@@ -1,0 +1,73 @@
+Given a string of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators.
+The valid operators are +, - and *.
+
+Input: "2*3-4*5"
+Output: [-34, -14, -10, -10, 10]
+Explanation: 
+(2*(3-(4*5))) = -34 
+((2*3)-(4*5)) = -14 
+((2*(3-4))*5) = -10 
+(2*((3-4)*5)) = -10 
+(((2*3)-4)*5) = 10
+
+O(nlogn) time
+O(n^2) space
+
+
+class Solution {
+public:
+    map<pair<int,int> , vector<int> > mp;
+    vector<string> op;
+    
+    vector<int> find(int st,int end){
+        if(st == end){
+            return { stoi(op[st]) };
+        }
+        if(mp.find({st,end}) != mp.end() ) return mp[ {st,end} ]; 
+        
+        vector<int> left ,right , res;
+        
+        for(int i=st+1 ; i<=end; i+=2){
+            left = find(st,i-1);                              // divide the problem left part
+            right = find(i+1 , end);                           // divide the problem 2nd part
+            
+            for(int x1 : left){                                   // combine the 1st and 2nd part
+                for(int x2 : right){
+                    int ans = 0;
+                    
+                    if(op[i] == "+"){
+                        ans = x1 + x2;
+                    }else if(op[i]== "-"){
+                        ans = x1-x2;
+                    }else {
+                        ans = x1*x2;
+                    }
+                    
+                    res.push_back(ans);
+                }
+            }
+        }
+        mp[{st,end}] =res;
+        return res;
+    }
+    
+    vector<int> diffWaysToCompute(string s) {
+        
+        string st="";
+        for(char x : s){              // store into vector i.e part the string
+            if(x=='+' || x=='-' || x=='*'){              
+                op.push_back(st);
+                string a(1,x);
+                op.push_back(a);
+                st="";
+            }else{
+                st += x;
+            }
+        }
+        op.push_back(st);
+        
+        int n = op.size();
+        return find(0,n-1);
+        
+    }
+};
