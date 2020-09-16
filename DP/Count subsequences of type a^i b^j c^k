@@ -1,0 +1,88 @@
+Given a string s, the task is to count number of subsequences of the form aibjck, where i >= 1, j >=1 and k >= 1.
+
+Note: Two subsequences are considered different if the set of array indexes picked for the 2 subsequences are different.
+
+Input  : abbc
+Output : 3
+Subsequences are abc, abc and abbc
+
+
+O(n) time
+O(1) space
+Math logic
+int countSubsequences(string s) { 
+    int a=0,b=0,c = 0; 
+    for ( int i = 0; i < s.size(); i++) { 
+        if (s[i] == 'a') 
+            a = (1 + 2 * a); 
+        else if (s[i] == 'b') 
+            b = (a + 2 * b); 
+        else if (s[i] == 'c') 
+            c = (b + 2 * c); 
+    } 
+  
+    return c; 
+} 
+
+
+
+
+-----------------------------
+Backtracking  + Dp method
+
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX 105
+
+int dp[3][MAX];
+string st;
+int n=0;
+
+int rec(char prev,int ind){
+    if(ind == n){
+        return  (prev == 'c');
+    }
+    
+    int ans=0;
+    for(int i=ind;i<n;i++){
+        if(prev=='a'){
+            if(st[i] == 'a' || st[i] == 'b'){
+              ans += rec(st[i],i+1);  
+            }
+        }else if(prev == 'b'){
+            if(st[i] =='b' || st[i] == 'c'){
+                ans += rec(st[i],i+1);
+            }
+        }else{
+            if(prev =='c') ans += rec(st[i],i+1);
+        }
+    }
+    return dp[prev-'a'][ind] = ans;
+}
+void solve(){
+    cin>>st;
+     n= st.length();
+    
+    for(int i=0;i<=n;i++){
+        dp[0][i] = dp[1][i] = dp[2][i]=-1;
+    }
+    int ans =0;
+    
+    for(int i=0;i<n;i++){
+        if(st[i] == 'a'){
+            ans = rec( 'a',i+1);
+            break;
+        }
+    }
+    cout<<ans<<endl;
+}
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t--){
+	    solve();
+	    
+	}
+	return 0;
+}
