@@ -1,0 +1,84 @@
+Example 1:
+
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+Example 2:
+
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
+
+
+O(n) time
+O(n) space
+
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<string> st;
+        
+        int n =s.length();
+        
+        string alp = "" , num="";
+        
+        for(int i=0;i<n;i++){
+            if(s[i] == ']'){
+                if(alp.size()>0) {
+                    st.push(alp); 
+                    alp="";
+                }  
+                
+                string repeat="";
+                while(!st.empty() && st.top() != "["){
+                    repeat = st.top()+repeat;
+                    st.pop();
+                }
+                st.pop();
+                
+                if(st.empty()) continue;   // if stack is empty
+                
+                string number_of_time = st.top();
+                st.pop();
+                
+                int ti = stoi(number_of_time);
+                
+                string str="";
+                for(int i=0;i<ti ;i++){
+                     str += repeat;
+                }
+                st.push(str);
+                
+            }else if(s[i] >= '0' && s[i] <= '9'){
+                
+                if(alp.size() >0){                  // like  ab3[c]
+                    st.push(alp);
+                    alp = "";
+                }
+                num += s[i];
+                
+            }else if(s[i]== '['){
+                
+                st.push(num);    
+                st.push(string (1,s[i]));
+                
+                num = "";               // reset the value for next 
+                alp="";
+                
+            }else{
+                alp += s[i];
+                
+            }
+        }
+        if(alp.size() >0){    // last alphabate  like   3[a]bc
+             st.push(alp); 
+        }
+        
+        
+        string ans="";
+        while(!st.empty()){
+            ans = st.top() + ans;
+            st.pop();
+        }
+        
+        return ans;
+    }
+};
