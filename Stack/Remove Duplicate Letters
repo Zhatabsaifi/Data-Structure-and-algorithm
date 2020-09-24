@@ -1,0 +1,43 @@
+Given a string which contains only lowercase letters, remove duplicate letters so that every letter appears once and only once.
+You must make sure your result is the smallest in lexicographical order among all possible results.
+
+Input: "cbacdcbc"
+Output: "acdb"
+
+O(n) time
+O(n) space
+
+
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        int n = s.length();
+        
+       stack<char> st;
+        vector<int> vec(26,0);
+        
+        for(char x: s){
+            vec[x-'a']++;
+        }
+        
+       map<char,int> mp;
+        
+        for(char x: s){
+            vec[x-'a']--;
+            if(mp.find(x) != mp.end()) continue;
+            
+            while(!st.empty() && st.top() > x && vec[st.top()-'a'] > 0){        // which come again after this index
+                mp.erase(st.top());
+                st.pop();
+            }
+            mp[x]=1;
+            st.push(x);
+        }
+        string ans="";
+        while(!st.empty()){
+            ans  = st.top() + ans;
+            st.pop();
+        }
+        return ans;
+    }
+};
