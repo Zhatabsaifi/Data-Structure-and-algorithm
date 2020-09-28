@@ -1,0 +1,53 @@
+There are several stones arranged in a row, and each stone has an associated value which is an integer given in the array stoneValue.
+
+In each round of the game, Alice divides the row into two non-empty rows (i.e. left row and right row), then Bob calculates the value of each row which is the sum of the values of all the stones in this row. Bob throws away the row which has the maximum value, and Alice's score increases by the value of the remaining row. If the value of the two rows are equal, Bob lets Alice decide which row will be thrown away. The next round starts with the remaining row.
+
+The game ends when there is only one stone remaining. Alice's is initially zero.
+
+Return the maximum score that Alice can obtain.
+
+Input: stoneValue = [6,2,3,4,5,5]
+Output: 18
+Explanation: In the first round, Alice divides the row to [6,2,3], [4,5,5]. The left row has the value 11 and the right row has value 14. Bob throws away the right row and Alice's score is now 11.
+In the second round Alice divides the row to [6], [2,3]. This time Bob throws away the left row and Alice's score becomes 16 (11 + 5).
+The last round Alice has only one choice to divide the row which is [2], [3]. Bob throws away the right row and Alice's score is now 18 (16 + 2). The game ends because only one stone is remaining in the row.
+
+O(
+
+class Solution {
+public:
+   
+    int rec(vector<int>&vec,int i,int j , vector<vector<int> >&dp){
+       if(i>=j) return 0;
+        if(i+1==j) return min(vec[i],vec[j]);
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int add=0;
+        for(int x=i;x<=j;x++) add += vec[x];
+        
+        int temp=0;
+        int ans=0;
+        for(int x= i;x<j;x++){
+            temp += vec[x];
+            int sec= add - temp;
+            
+            if(temp == sec){
+                ans = max(ans , temp + max( rec(vec,i,x,dp), rec(vec,x+1,j,dp) ) ) ;
+            }else if(temp < sec){
+                ans = max(ans , temp + rec(vec,i,x,dp)) ;
+            }else{
+                ans = max(ans ,sec + rec(vec,x+1,j,dp) );
+            }
+        }
+        return dp[i][j] = ans;
+    }
+    int stoneGameV(vector<int>& vec) {
+        
+        int n = vec.size();
+        vector<vector<int> > dp(n,vector<int> (n,-1));
+        if(n<=1) return 0;
+        return rec(vec,0,n-1,dp);
+       
+    }
+};
