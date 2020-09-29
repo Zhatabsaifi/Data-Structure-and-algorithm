@@ -1,0 +1,115 @@
+The idea is to use Doubly Linked List (DLL). We can delete middle element in 
+O(1) time by maintaining mid pointer. We can move mid pointer in both directions using previous and next pointers.
+
+#include <bits/stdc++.h> 
+using namespace std; 
+
+class DLLNode  
+{  
+    public: 
+    DLLNode *prev;  
+    int data;  
+    DLLNode *next;  
+};  
+
+class myStack  
+{  
+    public: 
+    DLLNode *head;  
+    DLLNode *mid;  
+    int count;  
+};  
+
+myStack *createMyStack()  
+{  
+    myStack *ms = new myStack(); 
+    ms->count = 0;  
+    return ms;  
+};  
+
+void push(myStack *ms, int new_data)  
+{  
+    
+    DLLNode* new_DLLNode = new DLLNode(); 
+    new_DLLNode->data = new_data;  
+  
+    /* Since we are adding at the beginning,  
+    prev is always NULL */
+    new_DLLNode->prev = NULL;  
+  
+    /* link the old list off the new DLLNode */
+    new_DLLNode->next = ms->head;  
+  
+    /* Increment count of items in stack */
+    ms->count += 1;  
+  
+    if (ms->count == 1)     // first value in stack
+    {  
+        ms->mid = new_DLLNode;  
+    }  
+    else
+    {  
+        ms->head->prev = new_DLLNode;  
+  
+        if(!(ms->count & 1)) // Update mid if ms->count is even 
+        ms->mid = ms->mid->prev;  
+    }  
+  
+    /* move head to point to the new DLLNode */
+    ms->head = new_DLLNode;  
+} 
+
+int pop(myStack *ms)  
+{  
+    /* Stack underflow */
+    if (ms->count == 0)  
+    {  
+        cout<<"Stack is empty\n";  
+        return -1;  
+    }  
+  
+    DLLNode *head = ms->head;  
+    int item = head->data;  
+    ms->head = head->next;  
+    
+    if (ms->head != NULL)  
+        ms->head->prev = NULL;  
+  
+    ms->count -= 1;  
+    
+    if ((ms->count) & 1 )       // total number of value is odd in stack
+        ms->mid = ms->mid->next;  
+  
+    free(head);  
+  
+    return item;  
+} 
+
+int findMiddle(myStack *ms)  
+{  
+    if (ms->count == 0)  
+    {  
+        cout << "Stack is empty now\n";  
+        return -1;  
+    }  
+  
+    return ms->mid->data;  
+}  
+
+int main()  
+{  
+    /* Let us create a stack using push() operation*/
+    myStack *ms = createMyStack();  
+    push(ms, 11);  
+    push(ms, 22);  
+    push(ms, 33);  
+    push(ms, 44);  
+    push(ms, 55);  
+    push(ms, 66);  
+    push(ms, 77);  
+  
+    cout << "Item popped is " << pop(ms) << endl;  
+    cout << "Item popped is " << pop(ms) << endl;  
+    cout << "Middle Element is " << findMiddle(ms) << endl;  
+    return 0;  
+}  
