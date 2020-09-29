@@ -1,0 +1,80 @@
+Given two strings 'str' and a wildcard pattern 'pattern' of length N and M respectively,  You have to print '1' if the wildcard pattern is matched with str else print '0' .
+
+The wildcard pattern can include the characters ‘?’ and ‘*’
+‘?’ – matches any single character
+‘*’ – Matches any sequence of characters (including the empty sequence)
+
+Input:
+pattern = "ba*a?"
+str = "baaabab"
+Output: 1
+Explanation: replace '*' with "aab" and '?' with 'b'
+
+
+-----------------------
+
+O(n*m) time complexity
+O(1) space complexity
+
+
+/*You are required to complete this method*/
+int wildCard(string pat,string str)
+{
+    int n = pat.length() , m = str.length();
+    bool dp[n+1][m+1];
+    memset(dp,false,sizeof(dp));
+    dp[0][0] = true;
+    for(int i=1;i<=n;i++){
+        if(pat[i-1]=='*')
+            dp[0][i] = dp[0][i-1];
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<=m;j++){
+            if(pat[i-1] == '*'){
+                dp[i][j] = dp[i-1][j] || dp[i][j-1];
+            }else if(pat[i-1] == '?' || pat[i-1]==str[j-1]){
+                dp[i][j] = dp[i-1][j-1];
+            }else{
+                dp[i][j]=false;
+            }
+        }
+    }
+    return dp[n][m] == false ? 0:1;
+}
+
+---------------------------------------------
+
+
+---------------------------------------
+O(min(n,m) ) time complexity
+O(1) space complexity
+
+
+
+int wildCard(string pat,string str)
+{
+    int n = pat.size() , m =str.size();
+    int ind_pat=-1,ind_st=-1;
+    
+    int i=0,j=0;
+    while(i<m){
+        if(j<n && str[i] == pat[j] || pat[j] == '?'){
+            i++;
+            j++;
+        }else if(j<n && pat[j] == '*'){
+            ind_pat = j;
+            ind_st = i;
+            j++;
+        }else if(ind_pat != -1){
+            i = ind_st+1;
+            j = ind_pat +1;
+            ind_st++;
+        }else {
+            return false;
+        }
+    }
+    while(j<n && pat[j] == '*') j++;
+    return (j==n);
+}
+
+--------------------------------
