@@ -3,6 +3,8 @@ don't change tree structure
 
 O(2*n) time 
 O(1) space
+
+parent store in right side 
  
  /**
  * Definition for a binary tree node.
