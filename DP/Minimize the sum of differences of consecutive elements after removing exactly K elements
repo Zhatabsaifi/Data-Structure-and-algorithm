@@ -1,0 +1,52 @@
+Given a sorted array of length ‘N’ and an integer ‘K'(K<N), the task is to remove exactly 'K' elements from the array such that sum of difference of consecutive elements of the array is minimised
+
+
+O(n^2') time complexity 
+
+int dp[N][N]; 
+bool vis[N][N]; 
+  
+// function to find minimum sum 
+int findSum(int* arr, int n, int k, int l, int r) 
+{ 
+    if ((l) + (n - 1 - r) == k)       //   // base-case 
+        return arr[r] - arr[l]; 
+    
+    if (vis[l][r])   return dp[l][r]; 
+    
+    vis[l][r] = 1; 
+
+    return dp[l][r] = min(findSum(arr, n, k, l, r - 1),   findSum(arr, n, k, l + 1, r)); 
+}
+
+int32_t main() 
+{ 
+    // input values 
+    int arr[] = { 1, 2, 100, 120, 140 }; 
+    int k = 2; 
+    int n = sizeof(arr) / sizeof(int); 
+  
+    // callin the required function; 
+    cout << findSum(arr, n, k, 0, n - 1); 
+} 
+
+
+-----------------------------
+
+O(n) time and 
+O(1) space
+
+int findSum(int* arr, int n, int k) 
+{   
+    int ans = -1  
+    for (int i = 0; i <= k; i++) { 
+        if(ans == -1){
+          ans = arr[ n-1-k +i ] - arr[0] ;
+        }else{     
+          ans = min(arr[n - 1 - (k - i)] - arr[i], ans); 
+        }
+    } 
+   
+    // returning final answer 
+    return ans; 
+}
