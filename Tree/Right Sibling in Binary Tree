@@ -1,0 +1,69 @@
+Given a binary tree, your task is to complete the function findRightSibling(), that should return the right sibling to a given node if it doesn’t exist return null.
+
+Structure of the node of the binary tree is as
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
+    Node* parent;
+};
+
+Input 1:
+
+             1
+            / \
+           2   3
+          /  \  \
+         4    6  5
+        /      \  \
+       7        9  8
+       /         \
+      10         12
+Input : Given above tree with parent pointer and node 10
+Output : 12
+
+
+O(n) time 
+O(1) space    -- only recursion stack use
+
+
+
+// function should return return the node of the 
+// right sibling to the provided node
+
+Node* rec(Node* root, int lev){
+    
+    if(!root && !root->parent) return NULL;
+    
+    Node* cur = root;
+    
+    while(cur->parent != NULL &&   (cur->parent->right == cur ||  cur->parent->left == cur && cur->parent->right == NULL)){    // node not in right side or right is not NULL
+                
+        cur = cur->parent;
+        lev++;       // count how many time goes up 
+    }
+    if(cur ->parent == NULL) return NULL;
+    
+    Node* rig = cur->parent->right;
+    
+    while(lev > 0){
+        if(rig->left != NULL){
+            rig = rig->left;
+        }else if(rig->right != NULL){
+            rig = rig->right;
+        }else{
+            break;
+        }
+        lev--;
+    }
+    if(lev == 0) return rig;
+    
+    return rec(rig , lev);          // use recursion stack //     check for this node and level
+}
+
+Node* findRightSibling(Node* node)
+{
+    // Code here
+    return rec(node,0);
+}
