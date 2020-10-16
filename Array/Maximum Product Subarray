@@ -1,0 +1,64 @@
+Given an array Arr that contains N integers (may be positive, negative or zero). Find the product of the maximum product subarray.
+
+Example 1:
+
+Input:
+N = 5
+Arr[] = {6, -3, -10, 0, 2}
+Output: 180
+Explanation: Subarray with maximum product
+is  6, -3, -10 which gives product as 180.
+
+Time - O(n) 
+Space - O(1)
+
+class Solution{
+public:
+	long long maxProduct(int *arr, int n) {
+	    
+        long long minVal = arr[0]; 
+        long long maxVal = arr[0]; 
+        long long maxProduct = arr[0]; 
+      
+        for (int i = 1; i < n; i++) { 
+      
+            if (arr[i] < 0){
+                 swap(maxVal, minVal); 
+            }
+               
+            maxVal = max(1LL*arr[i], maxVal * arr[i]); 
+            minVal = min(1LL*arr[i], minVal * arr[i]); 
+
+            maxProduct = max(maxProduct, maxVal); 
+        }         
+        return maxProduct; 
+	}
+};
+
+
+---------------------
+Time - O(n) 
+Space - O(1)
+
+
+
+class Solution {
+public:
+    int maxProduct(vector<int>& arr) {
+        int n = arr.size();
+        if(n==0) return 0;
+        
+        int cmax = arr[0] , cmin = arr[0] , pmax = arr[0],pmin = arr[0];
+        int ans=arr[0];
+        
+        for(int i=1;i<n;i++){
+            cmax = max({arr[i] , arr[i]*pmax , arr[i]*pmin});
+            cmin = min({arr[i] , arr[i]*pmax , arr[i]*pmin});
+            
+            ans = max(ans,cmax);
+            pmax= cmax;
+            pmin  = cmin;
+        }
+        return ans;
+    }
+};
