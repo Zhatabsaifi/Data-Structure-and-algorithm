@@ -1,0 +1,43 @@
+
+1 ≤ N ≤ 1000
+
+
+
+
+using namespace std;
+
+#define MAX 100000
+
+void multi(vector<int>&mul ,int v,int &ind){      // multiply
+    int carry=0;
+    for(int i=0;i<ind;i++){
+        int x = v*mul[i] + carry;
+        mul[i] = x%10;
+        carry = x/10;
+    }
+    while(carry){
+        mul[ind] = carry%10;
+        carry /=10;
+        ind++;
+    }
+}
+void solve(){
+    int n;
+    cin>>n;
+    vector<int> mul(MAX,0);
+    int ind=1;
+    mul[0]=1;
+    for(int i=2;i<=n;i++){
+        multi(mul,i,ind);
+    }
+    for(int i=ind-1;i>=0;i--) cout<<mul[i];  cout<<endl;
+}
+
+
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t--) solve();
+	return 0;
+}
