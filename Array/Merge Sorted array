@@ -1,0 +1,102 @@
+time - O(n*m)
+space - O(1)
+
+Instert sort concept
+--------------------------------------
+
+time - O( (n+m)log(n+m) )
+space - o(1)
+
+class Solution{
+public:
+	void merge(int a[], int b[], int n, int m) {
+	    // code here
+	   int count=n,number_of_swap = 0,i=0,j=0;
+     
+	    while( count -- && i<n && j<m)      count number of element need to be swap 
+	    {
+	        if(a[i] <= b[j]){
+                 i++;
+          }
+	        else if(a[i]>=b[j])
+	        {
+	            number_of_swap++;
+	            j++;
+	        }
+	        
+	    }
+	    
+	    for(i=0;i< number_of_swap ;i++){
+          swap(b[i],a[n-i-1]);
+      }
+	        
+	    sort(a,a+n);   take O(nlogn) time
+	    sort(b,b+m);    take (mlogm) time
+	}
+};
+
+-------------------------------------
+
+time - O(n+m)
+space - O(1) 
+
+Explain - 
+A =  (A + B*N ) = A
+
+class Solution{
+public:
+	void merge(int a[], int b[], int n, int m) {
+	    // code here
+	    int ma=0;
+	    
+	    for(int i=0;i<n;i++) ma= max(ma,a[i]);    ma  = max(a[n-1] , b[m-1] );
+	    for(int i=0;i<m;i++) ma= max(ma,b[i]);     // find maximum elemeent in both the array 
+	    ma++;
+	    
+	    int i=0,j=0,k=0;
+	    
+	    while(i<n && j<m && k< (n+m)){
+	        int e1  = a[i]%ma;
+	        int e2 = b[j]%ma;           // recover back original value 
+	        
+	        if(e1 <= e2){
+	            if(k<n) a[k] += (e1*ma);          // updade in the value      // a[k] = (a[k] + C*Ma)/Ma = a[k] 
+	            else b[k-n] += (e1*ma);
+	            
+	            i++;            // index increment
+	            k++;
+	        }else{
+	            if(k<n) a[k] += (e2*ma);                  // a[k] = (a[k] + C*Ma)/Ma = a[k] 
+	            else b[k-n] += (e2*ma);
+	            
+	            j++;
+	            k++;
+	        }
+	    }
+      
+	    // remain element process
+	    while(i < n){
+	        int e1 = a[i]%ma;
+	        
+	        if(k<n) a[k] += (e1*ma);      // sotre 
+	        else b[k-n] += (e1*ma);         // a[k] = (a[k] + C*Ma)/Ma = a[k] 
+	        
+	        i++;
+	        k++;
+	    }
+	    
+	    while(j < m){
+	        int e1 = b[j]%ma;
+	        
+	        if(k<n) b[k] += (e1*ma);                    // check this carefully
+	        else b[k-n] += (e1*ma);                     // a[k] = (a[k] + C*Ma)/Ma = a[k] 
+	        
+	        j++;
+	        k++;
+	    }
+	    
+	    for(int i=0;i<n;i++) a[i] /= ma;          // finally update the element by divide the ma
+	    for(int i=0;i<m;i++) b[i] /= ma;
+	}
+};
+
