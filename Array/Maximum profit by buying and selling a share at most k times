@@ -100,3 +100,11 @@ int maxProfit(int n, int k, int prices[])
     // Return the maximum profit 
     return ans; 
 } 
+
+Explain :
+
+
+--> Find the lowest price of a share before it rises followed by the highest before the prices fall again. These serve as the current buying and selling prices respectively.
+--> Compare these buying and selling prices to that of the previous transaction. If the current buying price is less than that of the previous transaction, remove that transaction and consider a new transaction with the current buying price and selling price of the removed transaction to increase the profit and continue as long as the profit can be further increased with the current buying price.
+--> Similarly compare the selling prices and increase the profit if possible.
+--> After traversing all the N prices, add the highest K profits. In case, the number of transactions is less than K, calculate the sum of profits of all the transactions.
