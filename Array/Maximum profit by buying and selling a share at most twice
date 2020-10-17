@@ -1,0 +1,76 @@
+In a daily share trading, a buyer buys shares in the morning and sells it on the same day. If the trader is allowed to make at most 2 transactions in a day,
+whereas the second transaction can only start after the first one is complete (Sell->buy->sell->buy). Given stock prices throughout the day, find out the maximum
+profit that a share trader could have made
+
+
+Input:   price[] = {10, 22, 5, 75, 65, 80}
+Output:  87
+Trader earns 87 as sum of 12 and 75
+Buy at price 10, sell at 22, buy at 5 and sell at 80
+
+
+time - O(n)
+Space - O(n)
+
+int maxProfit(int price[], int n) 
+{ 
+   vector<int> profit(n,0);
+   
+    int max_price = price[n-1]; 
+    for (int i=n-2;i>=0;i--)                  // Get the maximum profit with only one transactionn allowed
+    { 
+        if (price[i] > max_price) {               // max_price has maximum of price[i..n-1] 
+             max_price = price[i]; 
+         }
+            
+        profit[i] = max(profit[i+1] , max_price-price[i]);         // (but , sell) at (price[i] , max_pricee )  
+    } 
+  
+  
+    int min_price = price[0]; 
+    for (int i=1; i<n; i++)                              // Get the maximum profit with two transactions allowed 
+    { 
+        if (price[i] < min_price){                          // min_price is minimum price in price[0..i] 
+            min_price = price[i]; 
+        }
+  
+        // Maximum profit is maximum of: 
+        // a) previous maximum, i.e., profit[i-1] 
+   
+        profit[i] = max(profit[i-1], profit[i] +  (price[i] - min_price) );      // (Buy, Sell) at (min_price, price[i])   and add  profit of other trans. stored in profit[i] 
+    } 
+    int result = profit[n-1]; 
+  
+    return result; 
+} 
+
+
+
+--------------------------------------
+
+
+time - O(n)
+space - O(1) 
+
+
+int maxProfit(int price[], int n)
+{
+    int buy1, profit1, buy2, profit2;
+
+    buy1 = buy2 = INT_MAX;
+    profit1 = profit2 = 0;
+ 
+    for (int i = 0; i < n; i++) {
+
+        buy1 = min(buy1, price[i]);         // buy 1st stock at minimum price
+
+        profit1 = max(profit1, price[i] - buy1);        // profit selling the price is maximum
+ 
+        buy2 = min(buy2, price[i] - profit1);         //  Now for buying the 2nd stock,  we will integrate profit made from selling the 1st stock
+ 
+        profit2 = max(profit2, price[i] - buy2);    // Profit after selling a 2 stocks should be maximum as possible. profit2 tracks maximum possible 
+                                                    //  profit we can make from 0 to i-1.
+    }
+ 
+    return profit2;
+}
