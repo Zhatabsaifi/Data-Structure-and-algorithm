@@ -74,3 +74,23 @@ int maxProfit(int price[], int n)
  
     return profit2;
 }
+
+
+
+Explain -
+Let us take price[] = { 3, 5, 4, 5} 
+We buy 1st stock on day 1 
+buy1 = 3.
+We sell 1st stock on day 2. 
+profit1 = 5 – 3 = 2.
+We will make a profit of 2 after buying the stock on 1st day and selling on 2nd day. 
+So, profit1 = 2
+Now we will buy the 2nd stock on 3rd day
+Stock price on 3rd day is 4 
+Since we already made a profit of 2, We will spend only 2 extra from our packet to buy the stock 
+i.e., (4 – profit1) = 2
+buy2 = 2
+Now, we sell 2nd stock on day 4.
+Stock price on 4th day is 5. 
+profit2 = 5 – buy2 = 5 – 2 = 3.
+Now, we can see that the final profit includes the profit of buying and selling two stocks 
