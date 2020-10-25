@@ -1,0 +1,83 @@
+Given a number n, find sum of digits in all numbers from 1 to n.
+Examples:
+
+Input: n = 5
+Output: Sum of digits in numbers from 1 to 5 = 15
+
+Input: n = 12
+Output: Sum of digits in numbers from 1 to 12 = 51
+
+Input: n = 328
+Output: Sum of digits in numbers from 1 to 328 = 3241
+
+
+Brute force :
+time - (n* d)    d = digit in n;
+space - O(1)  
+
+--------------------
+optimse
+
+
+sum(9) = 1 + 2 + 3 + 4 ........... + 9
+       = 9*10/2 
+       = 45
+
+sum(99)  = 45 + (10 + 45) + (20 + 45) + ..... (90 + 45)
+         = 45*10 + (10 + 20 + 30 ... 90)
+         = 45*10 + 10(1 + 2 + ... 9)
+         = 45*10 + 45*10
+         = sum(9)*10 + 45*10 
+
+sum(999) = sum(99)*10 + 45*100
+
+
+    -------------->>>>>      sum(10d - 1) = sum(10d-1 - 1) * 10 + 45*(10d-1)    <<<<<<<<<<<--------------------formaula
+    
+    
+    time -- O(d)    d = digit in n
+    space -- O(d)  
+    
+    
+    int dp[100005];
+    
+    void setValue(int n){
+      memset(dp,0,sizeof(dp)) ;
+      dp[0]=1;   
+      dp[1]= 45;
+      for(int i=2;i<=n;i++){
+          dp[i] =  dp[i-1]*10 + 45*ceil(pow(10,i-1) ) ;
+      }
+    }
+    // d=1 dp[0]=0; 
+    // d=2 dp[1]=sum of digit from 1 to 9 = 45 
+    // d=3 dp[2]=sum of digit from 1 to 99 = a[1]*10 + 45*10^1 = 900 
+    // d=4 dp[3]=sum of digit from 1 to 999 = a[2]*10 + 45*10^2 = 13500 
+    
+    int solve(int n){
+        if(n < 10){
+            return (n * (n+1) )/2;
+        }
+        int digit = log10(n);
+        int p = pow(10, digit) ;
+        int msd = n/p ;
+        
+        return msd*dp[digit] + (msd * (msd-1)/2 )* p  + msd(1 + n%p )   +   solve(n%p );
+        
+        
+        //   msd * dp[digit] =   msd   time  1 to pow(10,digit) -1  (99,999,99999 ); 
+        //    (msd * (msd-1) )   ==  1 + 2+3+4    if msd = 5;   ==== solve utpo 499 
+        // msd(1 + n%p ) ---   msd*1  -- 500 +   msd*(n%p)  if 529 example number of time extra 5 come
+        
+        // solve(n%p)   == 529 = 500 + 29+9;
+    }
+    
+    int main(){
+      int n;
+      cin>>n;
+      int digit = log10(n);
+      setValue(digit);
+      
+      cout<< solve(int n) << endl;
+    }
+    
