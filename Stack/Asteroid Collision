@@ -1,0 +1,91 @@
+We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). 
+Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode.
+Two asteroids moving in the same direction will never meet.
+
+
+Example 1:
+
+Input: asteroids = [10,2,-5]
+Output: [10]
+Explanation: The 2 and -5 collide resulting in -5. The 10 and -5 collide resulting in 10
+
+I approach 
+time take more
+------------------------------------------------------------------------------------------------------------------------------
+vector<int> asteroidCollision(vector<int>& asteroids) {
+        
+        int mn;
+        vector<int>::iterator curr=++asteroids.begin(),prv;
+        while(curr!=asteroids.end()){
+            prv=curr; prv--;
+            if(curr==asteroids.begin()) curr++;
+            
+            else if(*prv>0&&*curr<0){
+                mn=min(abs(*prv),abs(*curr));
+                if(abs(*prv)==mn){
+                    asteroids.erase(prv);
+                    curr--;
+                 
+                }
+                if(abs(*curr)==mn) asteroids.erase(curr);
+            }
+            else curr++;
+        }
+        return asteroids;
+    }
+    
+ ---------------------------------------------------------------------------------
+ 
+ 
+ 2nd approach
+ time  - O(n)
+ space - O(n)
+ 
+ class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& arr) {
+        vector<int> ans;
+        
+        int n = arr.size();
+        stack<int> s;
+        
+        for(int i=0;i<n;i++){
+            int cur = arr[i];
+            bool insert = true;
+            
+            while(!s.empty() && s.top()>0 && cur < 0){  // s.top move right  cur move left
+               int top = s.top();
+                
+                if(abs(cur) > abs(top)){
+                    s.pop();
+                }else{
+                    
+                    insert = false;
+                    if(abs(cur) == abs(top)){
+                        s.pop();
+                    }
+                    break;
+                    
+                }
+            }
+            if(insert){
+                s.push(cur);
+            }
+        }
+        
+        stack<int> rev;
+        while(!s.empty()){      // reverse the answer
+            rev.push(s.top());
+            s.pop();
+        }
+        while(!rev.empty()){
+            ans.push_back(rev.top());
+            rev.pop();
+        }
+        return ans;
+    }
+};
