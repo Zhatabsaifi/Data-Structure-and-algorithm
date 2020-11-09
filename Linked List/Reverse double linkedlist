@@ -1,0 +1,40 @@
+Node* reverseDLL(Node * head)
+{
+   Node *left = head , *right = NULL;
+   right = head;
+   while(right->next != NULL) right = right ->next;
+   while(left != right && left->prev != right){
+       swap(left->data , right->data);
+       left = left->next;
+       right = right->prev;
+   }
+   return head;
+}
+
+data change
+-------------------
+
+
+link change
+
+
+Node* reverseDLL(Node * head)
+{
+    
+    if(head  == NULL || head->next == NULL) return head;
+    
+   Node *cur = NULL , *next =NULL;
+   while(head != NULL){
+       next =  head->next;
+       
+       head->next = cur;
+       if(cur != NULL){
+           cur->prev = head;
+       }
+       cur =  head;
+       //cout<<head->data<<endl;
+       head = next;
+   }
+   cur->prev = NULL;      // change last in same or first in reverse linkedlist change 
+   return cur;
+}
