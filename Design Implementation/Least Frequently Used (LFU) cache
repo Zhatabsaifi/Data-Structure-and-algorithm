@@ -30,3 +30,90 @@ lfu.put(4, 4);   // evicts key 1.
 lfu.get(1);      // return -1 (not found)
 lfu.get(3);      // return 3
 lfu.get(4);      // return 4
+
+
+
+
+
+#define pp  pair<int,int> 
+
+class LFUCache {
+public:
+    unordered_map<int , list<int> > freq_to_key;                                          // store the list of frequency
+    unordered_map<int , pp > key_info;                                                  //(key to {value,freq});
+    unordered_map<int , list<int> ::iterator > address ;                                    // store the address of every key i.e store on which location 
+    
+    int capacity , size;
+    int mini_freq;
+        
+        
+    LFUCache(int cap) {
+        capacity = cap;
+        size = 0;
+        mini_freq = 0;
+    }
+    
+    void update(int key){                                           // use to change the frequency and in list
+        int cur_freq = key_info[key].second;
+        
+        key_info[key].second++ ;                                  // increase the freq
+        
+        list<int> ::iterator it = address[key];                                     // find key address
+        
+        freq_to_key[cur_freq].erase(it);                                            // erase the previous
+        
+        cur_freq ++ ; 
+        
+        freq_to_key[cur_freq].push_back(key);                                           // insert in new list
+        
+        address[key] = -- freq_to_key[cur_freq].end();                                  // last element of list
+        
+        if(freq_to_key[mini_freq].empty() ){                                        // change mini_freq when the previous list is empty
+            mini_freq++;
+        }
+    }
+    
+    int get(int key) {
+        auto it = key_info.find(key);
+        
+        if(it != key_info.end()){
+           update(key);                                            // update the frequency
+            return key_info[key].first ;
+            
+        }
+        else return -1;
+    }
+    
+    void put(int key, int value) {
+          if(capacity<=0){                                    // base case
+            return;
+          }
+        
+        auto it = key_info.find(key);
+        
+        if(it != key_info.end()){                                   // already present
+            key_info[key].first = value;                                  // change the value
+            
+            update(key);                                        // change the frequency
+            
+        }else{
+            if(size == capacity){                                       // when list is full
+                int remove_key = freq_to_key[mini_freq].front();
+                
+                freq_to_key[mini_freq].pop_front();
+                key_info.erase(remove_key);                                         // remove storage
+                address.erase(remove_key);                                          // remove address of key 
+                
+            }else{                                             // when list is not full
+                size++;
+            }
+            
+            key_info[key] = {value , 1};   /                                / insert in freq 1
+            mini_freq = 1;                                    // because of new freq 1 key insert
+            
+            freq_to_key[1].push_back(key);                                        // insert in freq list
+            address[key] = -- freq_to_key[1].end();                                  // last element is the address of key storage
+            
+        }
+    }
+};
