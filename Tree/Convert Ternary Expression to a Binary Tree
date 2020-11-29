@@ -1,0 +1,83 @@
+Given a string that contains ternary expressions. The expressions may be nested, task is convert the given ternary expression to a binary Tree.
+
+Input :  string expression =   a?b:c 
+Output :        a
+              /  \
+             b    c
+
+Input : expression =  a?b?c:d:e
+Output :     a
+           /  \
+          b    e
+        /  \
+       c    d
+       
+       
+       
+       
+
+/*Complete the function below
+Node is as follows
+struct Node{
+	char data;
+	Node *left,*right;
+};
+*/
+Node* rec(string &str, int &ind , int &n){
+    Node* root = new Node(str[ind]);
+   
+   if(ind == n -1){
+       return root;
+   }
+   
+   ind++;   // skip the current root
+   
+   if(str[ind] == '?'){
+       ind++;     // skip the ? sign in string
+       root->left = rec(str,ind , n);
+       
+       ind++;   // skip the : in string
+       
+       root->right = rec(str,ind , n);
+   }
+   return root;
+}
+Node *convertExpression(string str,int i)
+{
+//add code here.
+   int len  = str.length();
+   return rec(str, i , len);
+}
+
+
+---------------------------------
+using stack
+
+
+
+Node *convertExpression(string str)
+{
+//add code here.
+   int n  = str.length();
+   stack<Node*> s;
+   
+   for(int i=n-1 ;i>=0 ; i -= 2){
+       Node* root = new Node(str[i]);
+       
+       if(i == n-1 ){           // last always the leaf
+           s.push(root);
+       }else if(i != 0 && str[i-1] == ':' && str[i+1] == ':'){      // false condition in ternary operator i.e.   condtion ? true : false ;
+           s.push(root);
+       }else if(i != 0 && str[i-1] == '?' && str[i+1] == ':'){      // true condition in ternary operator i.e.   condtion ? true : false ;
+           s.push(root);
+       }else{                                                        //  condtion  in ternary operator i.e.   condtion ? true : false ;
+           root->left = s.top();
+           s.pop();
+           root->right = s.top();
+           s.pop();
+           
+           s.push(root);
+       }
+   }
+   return s.top();
+}
