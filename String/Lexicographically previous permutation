@@ -1,0 +1,42 @@
+Given a word, find lexicographically smaller permutation of it. For example, lexicographically smaller permutation of “4321” is “4312” and next smaller permutation of 
+“4312” is “4231”. If the string is sorted in ascending order, the next lexicographically smaller permutation doesn’t exist.
+
+
+using STL liberary
+
+int main()
+{
+    string str = "4321";
+    if (prev_permutation(str.begin(), str.end()))
+        cout << "Previous permutation is " << str;
+    else
+        cout << "Previous permutation doesn't exist";
+    return 0;
+}
+
+---------------------------------------------------------------
+
+
+bool prevPermutation(string &st){
+    int n = st.length();
+    
+    int i = n-1;
+    
+    while(i>0 && st[i-1] <= st[i]){              // take all (12345) like this string
+        i--;
+    }
+    
+    if(i <= 0){                // if string is sorted in ascending order
+        return false;
+    }
+    
+    int j = i-1;
+    while(j+1 <n && st[j+1] < st[i-1]){              // Find rightmost element's index that is less than str[i - 1]
+        j++;
+    }
+    swap(st[j] , st[i-1]);
+    
+    reverse(st.begin() + i ,st.end());                    // Reverse the substring [i..n]
+    
+    return true;
+}
