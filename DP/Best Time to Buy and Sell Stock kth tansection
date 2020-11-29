@@ -1,0 +1,110 @@
+In share trading, a buyer buys shares and sells on a future date. Given the stock price of n days, the trader is allowed to make at most k transactions, 
+where a new transaction can only start after the previous transaction is complete, find out the maximum profit that a share trader could have made
+
+
+Input:  
+Price = [10, 22, 5, 75, 65, 80]
+    K = 2
+Output:  87
+Trader earns 87 as sum of 12 and 75
+Buy at price 10, sell at 22, buy at 
+5 and sell at 80
+
+
+
+
+time - O(k*n)
+space - O(k*n) 
+
+
+int maxProfit(int price[], int n, int k) 
+{ 
+    int profit[k + 1][n + 1]; 
+  
+    for (int i = 0; i <= k; i++)       // For day 0, you can't earn money 
+        profit[i][0] = 0; 
+
+    for (int j = 0; j <= n; j++)        // profit is 0 if we don't do any transation 
+        profit[0][j] = 0; 
+  
+    for (int i = 1; i <= k; i++) { 
+        int prevDiff = INT_MIN; 
+        for (int j = 1; j < n; j++) { 
+            prevDiff = max(prevDiff,  profit[i - 1][j - 1] - price[j - 1]);         // maximum in prevMax or before adding the ith transection
+            profit[i][j] = max(profit[i][j - 1],  price[j] + prevDiff);      // maximum in last or prevMax + current price
+        } 
+    } 
+  
+    return profit[k][n - 1]; 
+} 
+
+----------------------------------------------------------------------------------------------
+
+
+time - O(N*logN) 
+space - O(N)
+
+
+
+int maxProfit(int n, int k, int prices[]) 
+{ 
+    int ans = 0, buy = 0, sell = 0; 
+  
+    stack<  pair<int, int> > transaction;           // first -> buy index   second -1  -> selling index
+    priority_queue<int> profits; 
+  
+    while (sell < n) { 
+  
+        buy = sell;                                                           // get the highest profit transection    minimum buy price
+        while (buy < n - 1  && prices[buy] >= prices[buy + 1]){
+              buy++; 
+        }
+        
+        sell = buy + 1; 
+
+        while (sell < n  && prices[sell] >= prices[sell - 1]){                      // get maximum selling price
+            sell++; 
+        }
+
+        while (!transaction.empty()  && prices[buy] < prices[transaction.top().first]) {    // Check if the current buying price is greater than that  of the previous transaction
+            pair<int, int> p = transaction.top(); 
+  
+            profits.push( prices[p.second - 1]   - prices[p.first]);         // Store the profit 
+            
+            transaction.pop();        // Remove the previous transaction 
+        } 
+        
+        while (!transaction.empty()  && prices[sell - 1]  > prices[transaction.top().second - 1]) {     // Check if the current selling price is less than that of the previous transactions 
+            pair<int, int> p = transaction.top(); 
+  
+            profits.push(prices[p.second - 1]  - prices[buy]);         // Store the new profit 
+            buy = p.first;     // now buy is changed
+            
+            transaction.pop();       // Remove the previous transaction 
+        }
+        
+        transaction.push({ buy, sell });        // Add the new transactions 
+    } 
+    
+    while (!transaction.empty()) {        // Finally store the profits   of all the transactions 
+        profits.push(  prices[transaction.top().second - 1]  - prices[transaction.top().first]); 
+        transaction.pop(); 
+    } 
+    
+    while (k && !profits.empty()) {       // Add the highest K profits 
+        ans += profits.top(); 
+        profits.pop(); 
+        --k; 
+    } 
+  
+    // Return the maximum profit 
+    return ans; 
+} 
+
+Explain :
+
+
+--> Find the lowest price of a share before it rises followed by the highest before the prices fall again. These serve as the current buying and selling prices respectively.
+--> Compare these buying and selling prices to that of the previous transaction. If the current buying price is less than that of the previous transaction, remove that transaction and consider a new transaction with the current buying price and selling price of the removed transaction to increase the profit and continue as long as the profit can be further increased with the current buying price.
+--> Similarly compare the selling prices and increase the profit if possible.
+--> After traversing all the N prices, add the highest K profits. In case, the number of transactions is less than K, calculate the sum of profits of all the transactions.
