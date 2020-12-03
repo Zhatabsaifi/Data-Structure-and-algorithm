@@ -1,0 +1,58 @@
+Implement the class UndergroundSystem that supports three methods:
+
+1. checkIn(int id, string stationName, int t)
+
+A customer with id card equal to id, gets in the station stationName at time t.
+A customer can only be checked into one place at a time.
+2. checkOut(int id, string stationName, int t)
+
+A customer with id card equal to id, gets out from the station stationName at time t.
+3. getAverageTime(string startStation, string endStation) 
+
+Returns the average time to travel between the startStation and the endStation.
+The average time is computed from all the previous traveling from startStation to endStation that happened directly.
+Call to getAverageTime is always valid.
+You can assume all calls to checkIn and checkOut methods are consistent. That is, if a customer gets in at time t1 at some station, then it gets out at time t2 with t2 > t1.
+All events happen in chronological order.
+
+
+-----------------------------------------------------------
+
+#define ll int
+
+class UndergroundSystem {
+public:
+    UndergroundSystem() {                                         // constructer
+        
+    }
+    map<pair<ll,string> ,ll> in,out;
+    
+    void checkIn(int id, string stationName, int t) {                     // in time
+        in[make_pair(id,stationName)]=t;
+    }
+    
+    void checkOut(int id, string stationName, int t) {                  // out time
+        out[make_pair(id,stationName)]=t;
+    }
+    
+    double getAverageTime(string startStation, string endStation) {
+        vector<ll > vec;
+        for(auto it=in.begin();it != in.end();it++){                    // find all id which start time is equal to
+            if(it->first.second == startStation){
+                vec.push_back(it->first.first);
+            }
+        }
+        ll si= vec.size();
+        double ans= 0.0,count=0;
+        
+        for(auto x: vec){
+            auto it = out.find(make_pair(x,endStation));                          // find all id which end time is equal to and present in in time
+            if(it != out.end()){
+                auto itt = in.find(make_pair(x,startStation));
+                count++;  
+                ans += (it->second - itt->second);                    //  add all
+            }
+        }
+        return ans/count;
+    }
+};
