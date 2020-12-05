@@ -1,0 +1,51 @@
+Given two sorted arrays and a number x, find the pair whose sum is closest to x and the pair has an element from each array.
+We are given two arrays ar1[0…m-1] and ar2[0..n-1] and a number x, we need to find the pair ar1[i] + ar2[j] such that absolute value of (ar1[i] + ar2[j] – x) is minimum.
+
+Input:  ar1[] = {1, 4, 5, 7};
+        ar2[] = {10, 20, 30, 40};
+        x = 32      
+Output:  1 and 30
+
+Input:  ar1[] = {1, 4, 5, 7};
+        ar2[] = {10, 20, 30, 40};
+        x = 50      
+Output:  7 and 40
+
+
+1) brute force  time - O(n*m)
+
+2) merge sort technique 
+    time - O(m+n) merge sort 
+    space  - O(m+n)  auxilary space  in merge sort array
+    
+3) 
+  time - O(m+n)
+  space - O(1)
+  
+  void printClosest(int ar1[], int ar2[], int m, int n, int x) 
+{ 
+    int diff = INT_MAX; 
+    int res_l, res_r; 
+
+    int l = 0, r = n-1; 
+    while (l<m && r>=0) 
+    {
+       if (abs(ar1[l] + ar2[r] - x) < diff)                         // find closest pair in array
+       { 
+           res_l = l; 
+           res_r = r; 
+           diff = abs(ar1[l] + ar2[r] - x); 
+       }
+       
+       
+       if (ar1[l] + ar2[r] > x)                                         // If sum of this pair is more than x, move to smaller side 
+           r--; 
+       else                                                     // move to the greater side 
+           l++; 
+    } 
+  
+    // Print the result 
+    cout << "The closest pair is [" << ar1[res_l] << ", "  << ar2[res_r] << "] \n"; 
+} 
+    
+    
