@@ -1,0 +1,60 @@
+Given a binary matrix. Find the distance of nearest 1 in the matrix for each cell.
+
+Example:
+Input:
+2
+2 2 
+1 0 0 1
+1 2
+1 1
+
+Output:
+0 1 1 0
+0 0
+
+Explanation:
+Testcase 1:
+1 0
+0 1
+0 at {0, 1} and 0 at {1, 0} are at 1 distance from 1s at {0, 0} and {1, 1} respectively.
+
+
+
+
+int dir[4][2] = { {1,0} ,{-1,0} ,{0,1} ,{0,-1}};              // direction
+  
+bool check(int i,int j,int n,int m){                        // chcek the boundry is valid or not
+    return (i>=0 && j>=0 && i<n && j<m);
+}
+
+vector <vector <int> > nearest(vector<vector<int>> &mat, int n, int m) {
+
+    vector<vector<int> > ans(n, vector<int> (m,INT_MAX));   // answer 
+    
+    queue< pair<int,int> > q;
+    
+    for(int i=0;i<n;i++){                                         // initialise queue which answer is zero  
+        for(int j=0;j<m;j++){
+            if(mat[i][j] == 1){
+                ans[i][j] = 0;                                  // answer is zero
+                q.push( {i,j});                           // push index of those whose answer is zero
+            }
+        }
+    }
+    
+    while(!q.empty()){
+       pair<int,int>  pp = q.front();                             // take 1st in queue
+        q.pop();
+        
+        for(int i=0;i<4;i++){                                     // check in all 4 direction
+            int x =  pp.first + dir[i][0];
+            int y = pp.second + dir[i][1];
+            
+            if(check(x,y,n,m) && ans[x][y] > ans[pp.first][pp.second] + 1){                     // main condition
+                ans[x][y] = ans[pp.first][pp.second] + 1; 
+                q.push({x,y});
+            }
+        }
+    }
+    return ans;
+}
