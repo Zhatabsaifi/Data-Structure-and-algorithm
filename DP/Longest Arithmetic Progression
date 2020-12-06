@@ -1,0 +1,153 @@
+Given a set of numbers, find the Length of the Longest Arithmetic Progression (LLAP) in it.
+Examples:
+
+set[] = {1, 7, 10, 15, 27, 29}
+output = 3
+The longest arithmetic progression is {1, 15, 29}
+
+set[] = {5, 10, 15, 20, 25, 30}
+output = 6
+The whole set is in AP
+
+
+Ap - a,b,c,d,e,f
+    a + c = 2*b
+    b + d = 2*c 
+
+------------------------------
+time complexity - O(n^2 logn)
+space  - O(n^2)
+
+
+class Solution{   
+public:
+    int lenghtOfLongestAP(int arr[], int n) {
+        // code here
+        unordered_map<int,int>umap;
+        
+        vector<unordered_map<int,int>>v(n,umap);
+          int maxVal=0;
+          
+          for(int i=1 ; i<n ;i++)
+          {
+              for(int j=0 ; j<i ; j++)
+              {
+                  int d = arr[i]-arr[j];
+                  
+                  if(v[j].find(d) == v[j].end()){
+                    v[i][d]=1;
+                  }
+                  else{
+                    v[i][d]=v[j][d]+1;
+                  }
+                  
+                  maxVal=max(maxVal,v[i][d]);
+              }
+          }
+          
+          return maxVal+1 ;
+    }
+};
+
+
+
+-----------------------------------------------------------
+
+time - O(n^2)
+space - O(n^2)
+
+
+class Solution{   
+public:
+    int lenghtOfLongestAP(int set[], int n) {
+        
+        if (n <= 2){                                      // base case
+            return n;
+        }
+        int dp[n][n]; 
+        int ans = 2;                                   // atleast 2 element present in AP list
+        
+        for (int i = 0; i < n; i++){ 
+            dp[i][n-1] = 2;                                     // index 0 and n-1 element present in AP then answer is 2
+        }
+      
+        for (int j=n-2; j>=1; j--) 
+        { 
+                                               //   AP list -->   a,b,c,d,e,f
+                                                //    a+c = 2*b
+                                               //   i-> a , j->b , k ->c
+            
+            int i = j-1, k = j+1; 
+            while (i >= 0 && k <= n-1) 
+            { 
+               if (set[i] + set[k] < 2*set[j]){ 
+                   k++; 
+               }
+               else if (set[i] + set[k] > 2*set[j] ) 
+               {   dp[i][j] = 2;                               // consider i and j index value in AP
+                    i--;  
+                } 
+               else
+               { 
+                   dp[i][j] = dp[j][k] + 1;                                // difference between i and j is equal to j and k index value 
+                   ans = max(ans, dp[i][j]); 
+      
+                   i--;
+                   k++; 
+               } 
+            } 
+      
+            while (i >= 0) 
+            { 
+                dp[i][j] = 2;                                  // consider i and j index is in AP list                        
+                i--; 
+            } 
+        } 
+        return ans;
+    }
+};
+
+
+
+-----------------------------------------------------
+
+time - O(n^2)
+space  - O(n)
+
+
+int Solution(vector<int> A) 
+{ 
+    int ans = 2; 
+    int n = A.size(); 
+    
+    if (n <= 2) {                               // base case
+        return n; 
+     }
+  
+    vector<int> llap(n, 2);                 // initialise answer
+  
+    sort(A.begin(), A.end());                     // sort the value
+  
+    for (int j = n - 2; j >= 0; j--) 
+    { 
+        int i = j - 1; 
+        int k = j + 1; 
+        
+        while (i >= 0 && k < n) 
+        { 
+            if (A[i] + A[k] == 2 * A[j]) 
+            { 
+                llap[j] = max(llap[k] + 1, llap[j]);              // dp method
+                
+                ans = max(ans, llap[j]); 
+                i -= 1; 
+                k += 1; 
+            } 
+            else if (A[i] + A[k] < 2 * A[j]) 
+                k += 1; 
+            else
+                i -= 1; 
+        } 
+    } 
+    return ans; 
+} 
