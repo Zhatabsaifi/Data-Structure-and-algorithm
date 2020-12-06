@@ -126,7 +126,8 @@ int Solution(vector<int> A)
   
     vector<int> llap(n, 2);                 // initialise answer
   
-    sort(A.begin(), A.end());                     // sort the value
+    //sort(A.begin(), A.end());                     // sort the value
+    // use when given unsorted array
   
     for (int j = n - 2; j >= 0; j--) 
     { 
