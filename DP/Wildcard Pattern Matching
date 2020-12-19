@@ -14,7 +14,7 @@ Explanation: replace '*' with "aab" and '?' with 'b'
 -----------------------
 
 O(n*m) time complexity
-O(1) space complexity
+O(n*m) space complexity
 
 
 /*You are required to complete this method*/
@@ -46,7 +46,7 @@ int wildCard(string pat,string str)
 
 
 ---------------------------------------
-O(min(n,m) ) time complexity
+O(m + n ) time complexity
 O(1) space complexity
 
 
