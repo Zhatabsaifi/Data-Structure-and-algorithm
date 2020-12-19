@@ -1,0 +1,60 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    void mergeSort(ListNode* node,ListNode* begin){
+       if(node == NULL || node->next == NULL){
+           begin->next = node;
+           return ;
+       }
+        
+        ListNode*slow = node;
+        for(ListNode* fast = slow;slow!= NULL ; slow = slow->next){
+            fast = (fast->next != NULL) ? fast->next->next: fast->next;
+            if(fast == NULL) break;
+        }
+        
+        // split the list into half
+        ListNode *begin1 = node;
+        ListNode* begin2 = slow->next;
+        slow->next= NULL;
+        
+        mergeSort(begin1,begin);
+        begin1=begin->next;
+        mergeSort(begin2,begin);
+        begin2 = begin->next;
+        
+        // merge
+        ListNode* anc = begin;
+        for( ; begin1 != NULL && begin2!= NULL;){
+            if(begin1->val < begin2->val){
+                anc->next = begin1;
+                begin1=begin1->next;
+            }else{
+                anc ->next = begin2;
+                begin2 = begin2->next;
+            }
+            anc= anc->next;
+        }
+        anc ->next = (begin1==NULL)?begin2:begin1;
+    }
+    
+    
+    
+    ListNode* sortList(ListNode* head) {
+       if(head == NULL || head->next == NULL)
+           return head;
+        
+        ListNode anchor;
+        mergeSort(head,&anchor);
+        return anchor.next;
+    }
+};
