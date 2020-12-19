@@ -1,0 +1,30 @@
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+       if(head == NULL || head->next == NULL)  // 0 or 1 node
+           return head;
+        ListNode *newHead=NULL, *cur=head,*next = NULL;
+        ListNode *temp=NULL,*temp2=NULL;
+        while(cur != NULL){
+            next = cur->next;
+            
+            if(newHead == NULL || newHead->val >= cur->val){
+                temp = newHead;
+                newHead = cur;
+                newHead->next = temp;
+            }else{
+                temp = newHead;
+                while(temp != NULL && temp->next != NULL 
+                     && temp->next->val <= cur->val){
+                    temp = temp->next;
+                }
+                
+                temp2 = temp->next;
+                temp->next = cur;
+                temp->next->next = temp2;
+            }
+            cur = next;
+        }
+        return newHead;
+    }
+};
