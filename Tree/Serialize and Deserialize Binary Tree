@@ -1,0 +1,53 @@
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted
+across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just 
+need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+Clarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative
+and come up with different approaches yourself.
+
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root == NULL) return "N";
+        string s = to_string(root->val);
+        s = s + "," + serialize(root->left) + "," + serialize(root->right);
+        return s;
+    }
+
+    
+    TreeNode* rec(string data , int &index){
+        int n = data.size();
+        if(n == 0) return NULL;
+        
+        if(data[index] == 'N'){
+            index += 2;     // N, increse
+            return NULL;
+        }
+        string s = "";
+        while(index < n && data[index] != ','){
+            s += data[index++];
+        }
+        index +=1;
+        
+        TreeNode* root  = new TreeNode(stoi(s));
+        root->left = rec(data,index);
+        root->right = rec(data,index);
+        
+        return root;
+    }
+    
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int index = 0;
+        return rec(data,index);
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
