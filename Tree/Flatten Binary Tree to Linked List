@@ -63,3 +63,34 @@ public:
         }
     }
 };
+
+
+
+----------------------------------
+
+void FlattenBinaryTree(Node* root, Node** last) 
+{ 
+    if (root == NULL) 
+        return; 
+  
+    Node* left = root->left; 
+    Node* right = root->right; 
+  
+    // Avoid first iteration where root is 
+    // the only node in the list 
+    if (root != *last) { 
+        (*last)->right = root; 
+        (*last)->left = NULL; 
+        *last = root; 
+    } 
+  
+    FlattenBinaryTree(left, last); 
+    FlattenBinaryTree(right, last); 
+    if (left == NULL && right == NULL) 
+        *last = root; 
+} 
+
+int main(){
+    Node* last = root; 
+    FlattenBinaryTree(root, &last);
+}
