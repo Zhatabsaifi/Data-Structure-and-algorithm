@@ -48,11 +48,11 @@ bool isCyclic(int V, vector<int> adj[])
      q.pop();
      
     visit++;
-     for(int j =0; j <adj[u].size();j++){
-         degree[adj[u][j]]--;
-         if(degree[adj[u][j]]==0)
-            q.push(adj[u][j]);
-     }
+     for(int x : adj[u]){
+        if(-- degree[x] == 0){
+            q.push(x);
+        }
+    }
    }
    if(visit == V) return false;
    else return true;
