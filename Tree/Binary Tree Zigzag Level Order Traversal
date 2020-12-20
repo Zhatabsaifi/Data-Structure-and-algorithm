@@ -1,0 +1,112 @@
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+
+
+
+using 2 stack
+
+time - O(n)
+space - O(n) + O(n) = O(2n) 
+
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int >> ans;
+        vector<int> a;
+        if (!root) return ans;
+
+        stack< TreeNode*> currentlevel; 
+        stack<TreeNode *> nextlevel; 
+
+        currentlevel.push(root);    
+        bool lefttoright = true; 
+        while (!currentlevel.empty()) { 
+            TreeNode* temp = currentlevel.top(); 
+            currentlevel.pop(); 
+                a.push_back(temp->val);
+                if (lefttoright) { 
+                    if (temp->left) 
+                        nextlevel.push(temp->left); 
+                    if (temp->right) 
+                        nextlevel.push(temp->right); 
+                } 
+                else { 
+                    if (temp->right) 
+                        nextlevel.push(temp->right); 
+                    if (temp->left) 
+                        nextlevel.push(temp->left); 
+                } 
+
+            if (currentlevel.empty()) { 
+                lefttoright = !lefttoright; 
+                ans.push_back(a);
+                a.clear();
+                swap(currentlevel, nextlevel); 
+            } 
+        } 
+        return ans;
+    }
+};
+
+
+-----------------------------------------------------------------------------
+
+using dequeue
+
+
+void spiralOrder(Node* root) 
+{ 
+  
+    deque<Node*> d; 
+  
+    // Push root 
+    d.push_back(root); 
+  
+    // Direction 0 shows print right to left 
+    // and for Direction 1 left to right 
+    int dir = 0; 
+    while (!d.empty()) { 
+        int size = d.size(); 
+        while (size--) { 
+            // One whole level 
+            // will be print in this loop 
+  
+            if (dir == 0) { 
+                Node* temp = d.back(); 
+                d.pop_back(); 
+                if (temp->right) 
+                    d.push_front(temp->right); 
+                if (temp->left) 
+                    d.push_front(temp->left); 
+                cout << temp->data << " "; 
+            } 
+            else { 
+                Node* temp = d.front(); 
+                d.pop_front(); 
+                if (temp->left) 
+                    d.push_back(temp->left); 
+                if (temp->right) 
+                    d.push_back(temp->right); 
+                cout << temp->data << " "; 
+            } 
+        } 
+        cout << endl; 
+        // Direction change 
+        dir = 1 - dir; 
+    } 
+} 
