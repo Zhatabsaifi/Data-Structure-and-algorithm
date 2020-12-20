@@ -1,0 +1,43 @@
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+For example, given
+
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+
+
+class Solution {
+public:
+    
+    int search(vector<int>&in ,int st,int end,int val){
+        for(int i=st;i<=end;i++){
+            if(in[i] == val) return i;
+        }
+        return -1;
+    }
+    
+    TreeNode* rec(vector<int> &pre,vector<int>&in , int st,int end, int &index, int n){
+        if(st > end) return NULL;
+        
+        TreeNode* root = new TreeNode(pre[index]);
+        index++;
+        
+        if(st == end) return root;
+        
+        int sea = search(in,st,end,root->val);
+        
+        root->left = rec(pre,in, st,sea -1, index,n);
+        root->right = rec(pre,in,sea+1,end,index , n);
+        return root;
+    }
+    
+    TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
+        int n = in.size();
+        int index= 0;
+        return rec(pre,in , 0,n-1,index , n);
+    }
+};
+
