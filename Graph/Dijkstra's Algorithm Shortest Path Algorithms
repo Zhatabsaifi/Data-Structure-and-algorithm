@@ -1,0 +1,61 @@
+Dijkstra's algorithm has many variants but the most common one is to find the shortest paths from the source vertex to all other vertices in the graph.
+
+
+
+time - O(V + ElogV )
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pp pair<int,int> 
+#define MAX	10005
+
+vector<pp> edge[MAX];
+
+vector<int> dijkstra(int n,int node){
+	vector<bool> visit(n,false);
+	vector<int> dis(n , INT_MAX);
+
+	dis[node] = 0;
+
+	priority_queue<pp ,vector<pp> , greater<pp> > q;
+	q.push({0 , node});
+
+	while(!q.empty()){
+		pp u = q.top();
+		q.pop();
+
+		int src = u.second , wei = u.first;
+
+		if(visit[src] == true) continue;
+
+		visit[src] = true;
+
+		for(pp child : edge[src]){
+			int dest = child.second ;
+			int weight = child.first;
+
+			if(dis[src] + weight < dis[dest]){          // distance is less
+				dis[dest] = dis[src] + weight;
+				q.push( {dis[dest] , dest});
+			}
+		}
+	}
+	return dis;
+}
+
+int main() {
+	int n,m;
+	cin>>n>>m;
+	for(int i=0;i<m;i++){
+		int a,b,w;
+		cin>>a>>b>>w;
+		--a; --b;
+		edge[a].push_back({w , b});
+	}
+	vector<int> ans = dijkstra(n , 0);
+	for(int i=1;i<ans.size() ; i++){
+		cout<<ans[i]<<" ";
+	}
+
+}
