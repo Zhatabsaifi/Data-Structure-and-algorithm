@@ -29,7 +29,7 @@ int wildCard(string pat,string str)
             dp[0][i] = dp[0][i-1];
     }
     for(int i=1;i<=n;i++){
-        for(int j=0;j<=m;j++){
+        for(int j=1;j<=m;j++){
             if(pat[i-1] == '*'){
                 dp[i][j] = dp[i-1][j] || dp[i][j-1];
             }else if(pat[i-1] == '?' || pat[i-1]==str[j-1]){
