@@ -1,0 +1,65 @@
+
+time - O(n^2) 
+
+class Solution {
+public:
+   
+    TreeNode* rec(TreeNode* root){
+        if(root == NULL) return NULL;
+        
+        if(root->left == NULL && root->right == NULL){
+            return root;
+        }
+       
+        TreeNode* left = rec(root->left);
+        TreeNode* right  = rec(root->right);
+        
+        if(left != NULL){
+            TreeNode* temp = left;
+            while(temp->right != NULL){                   // this loop take O(n) time 
+                   temp = temp->right;
+            }
+            
+            temp->right = right;
+            root->right  = left;
+            root->left = NULL;
+        }
+        return root;
+    }
+    void flatten(TreeNode* root) {
+        
+        rec(root);
+    }
+};
+
+
+
+
+--------------------------
+using stack
+
+time - O(n)
+space - O(logn) stack space
+
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        stack<TreeNode*> s;
+        while(root != NULL || s.size() > 0){
+            
+            if(root->right != NULL){        // right child store in stack
+                s.push(root->right);
+            }
+            
+            root->right = root->left;        // change the connection 
+            root->left = NULL;
+            
+            if(root->right == NULL && s.size() > 0){        // if left child is NULL 
+                root->right = s.top();
+                s.pop();
+            }
+            
+            root = root->right;
+        }
+    }
+};
