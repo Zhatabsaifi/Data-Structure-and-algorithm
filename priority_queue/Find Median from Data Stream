@@ -1,0 +1,116 @@
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+For example,
+[2,3,4], the median is 3
+
+[2,3], the median is (2 + 3) / 2 = 2.5
+
+Design a data structure that supports the following two operations:
+
+void addNum(int num) - Add a integer number from the data stream to the data structure.
+double findMedian() - Return the median of all elements so far.
+ 
+
+Example:
+
+addNum(1)
+addNum(2)
+findMedian() -> 1.5
+addNum(3) 
+findMedian() -> 2
+
+
+
+
+-------------------------------
+using priority queue
+
+
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+   priority_queue<double> lo;
+   priority_queue<double, vector<double> , greater<double> > hi;
+    
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        lo.push(num);
+        
+        hi.push(lo.top());
+        lo.pop();
+        
+        if(lo.size() < hi.size()){
+            lo.push(hi.top());
+            hi.pop();
+        }
+    }
+    
+    double findMedian() {
+      if(lo.size() > hi.size()){
+          return lo.top();
+      }else{
+          double mid = lo.top() + hi.top();
+          mid = mid*0.5;
+          return mid;
+      }
+    }
+};
+
+
+
+
+---------------------------
+using map 
+
+
+
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+   multiset<int> s;
+     multiset<int>::iterator mid;
+    
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+       int n = s.size();
+        s.insert(num);
+        if(n==0){
+            mid = s.begin();
+        }else{
+           if(n&1){
+               if(num < *mid){
+                   -- mid;    // add next also with mid index
+               }else{
+                  
+               }
+           }else{
+               if(num < *mid){
+                   
+               }else{
+                   mid = ++ mid;
+               }
+               
+           }
+        }
+    }
+    
+    double findMedian() {
+        int n = s.size();
+        if(n&1){
+            return *mid;
+        }else{
+             multiset<int>::iterator mm = mid;
+            double re = *mm;
+            ++mm;
+            re += *mm;
+            re = re*0.5;
+            return re;
+        }
+    }
+};
