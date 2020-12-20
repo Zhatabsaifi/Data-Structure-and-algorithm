@@ -1,0 +1,51 @@
+In Binary Tree, Inorder successor of a node is the next node in Inorder traversal of the Binary Tree. Inorder Successor is NULL for the last node in Inorder traversal. 
+In Binary Search Tree, Inorder Successor of an input node can also be defined as the node with the smallest key greater than the key of the input node. 
+So, it is sometimes important to find next node in sorted order.
+
+
+---------------------
+if parent link is possible
+
+
+Node* successor(Node* root, Node*x{
+
+  if(x->right != NULL){         // if right persent
+      x =x->right;
+      while(x->left != NULL){       // goes left in right part of x
+          x = x->left;
+      }
+      return x;
+  }
+  
+  
+  Node* par = x->par;
+  while(par != NULL && node == par->right){       // if the node is right part of parent goes move above
+    node = par;
+    par = node->parent;
+  }
+  return par;
+  
+}
+
+
+---------------------------------------
+
+if parent link is not given
+
+time - O(logn)   hight of tree
+space - O(1) 
+
+Node * inOrderSuccessor(Node *root, Node *x)
+{
+    //Your code here
+    Node *ans=NULL;
+    while(root != NULL){
+        if(root->data > x->data){
+            ans = root;
+            root = root->left;
+        }else{
+            root = root->right;
+        }
+    }
+    return ans;
+}
