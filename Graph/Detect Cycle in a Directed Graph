@@ -1,0 +1,59 @@
+use dfs
+
+bool dfs(int node,int par, vector<bool> &visit, vector<int> adj[],vector<bool> &rec){
+    visit[node]=true;
+    rec[node]=true;
+    for(int x: adj[node]){
+        if(visit[x] == false){
+            if(dfs(x,node,visit,adj,rec)) return true;
+        }
+        else if(rec[x]) return true;
+    }
+    rec[node]=false;
+    return false;
+}
+
+bool isCyclic(int V, vector<int> adj[])
+{
+    vector<bool> visit(V,false) ,rec(V,false) ;
+    for(int i=0;i<V;i++){
+        if(visit[i]==false){
+            if(dfs(i,-1,visit,adj,rec)) return true;
+        }
+    }
+    return false;
+}
+
+
+
+-----------------------------------
+use bfs
+
+
+bool isCyclic(int V, vector<int> adj[])
+{
+   vector<int> degree(V,0);
+   for(int i=0;i<V;i++){
+       for(int x : adj[i]){
+           degree[x]++;
+       }
+   }
+   queue<int> q;
+   for(int i=0;i<V;i++){
+       if(degree[i] == 0) q.push(i);
+   }
+   int visit=0;
+   while(!q.empty()){
+      int u =q.front();
+     q.pop();
+     
+    visit++;
+     for(int j =0; j <adj[u].size();j++){
+         degree[adj[u][j]]--;
+         if(degree[adj[u][j]]==0)
+            q.push(adj[u][j]);
+     }
+   }
+   if(visit == V) return false;
+   else return true;
+}
