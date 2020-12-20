@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+
+void fill(int node,vector<int> adj[] , vector<bool> &visit, stack<int> &s){
+    visit[node] = true;
+    
+    for(int x: adj[node]){
+        if(!visit[x]){
+            fill(x,adj,visit,s);
+        }
+    }
+    s.push(node);
+}
+
+vector<vector<int> > reverse(vector<int> adj[],int n ){
+  vector<vector<int> > edge(n);
+  
+    for(int i=0;i<n;i++){
+        for(int x: adj[i]){
+            edge[x].push_back(i);
+        }
+    }
+    return edge;
+}
+void dfs(int node,vector<bool> &visit, vector<vector<int> >&adj){
+    visit[node]=true;
+  
+    for(int x: adj[node]){
+        if(!visit[x]){
+            dfs(x,visit,adj);
+        }
+    }
+}
+int kosaraju(int n, vector<int> adj[])
+{
+    stack<int> s;
+    
+    vector<bool> visit(n,false);
+    for(int i=0;i<n;i++){
+        if(!visit[i]){
+            fill(i,adj,visit,s);
+        }
+    }
+    vector<vector<int> > edge = reverse(adj,n);
+    fill(visit.begin(),visit.end(),false);
+    int cnt=0;
+    
+    while(s.empty()==false){
+        int x = s.top();
+        s.pop();
+       if(!visit[x]){
+           dfs(x,visit,edge);
+           cnt++;
+       }
+    }
+   
+    return cnt;
+}
+
+
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b;
+        cin >> a >> b;
+        int m, n;
+        vector<int> adj[a];
+        for (int i = 0; i < b; i++) {
+            cin >> m >> n;
+            adj[m].push_back(n);
+        }
+        cout << kosaraju(a, adj) << endl;
+    }
+    return 0;
+}
+  // } Driver Code Ends
