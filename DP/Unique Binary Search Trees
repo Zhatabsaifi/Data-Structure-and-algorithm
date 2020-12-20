@@ -1,5 +1,16 @@
 Given n, how many structurally unique BST's (binary search trees) that store values 1 ... n?
 
+formula :
+            2*n Cn /(n+1);
+            
+            if n=3;
+            
+            then 6C3 / (3+1)
+            => 6*5*4/(4*3*2) = 5
+
+
+
+
 Example:
 
 Input: 3
