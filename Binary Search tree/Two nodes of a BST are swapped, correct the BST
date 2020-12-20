@@ -1,0 +1,30 @@
+
+class Solution {
+public:
+    TreeNode *prev =NULL, *ele = NULL, *ele2  = NULL;
+    
+    void rec(TreeNode* root){
+        if(root == NULL) return ;
+        rec(root->left);
+        
+        if(prev != NULL && root->val < prev->val){
+            if(ele == NULL){
+                ele = prev;
+                cout<<"ele " <<ele->val<<endl;
+            }
+            ele2 = root;
+            cout<<"ele2 "<<ele2->val<<endl;
+        }
+        
+        prev = root;
+        rec(root->right);
+    }
+    
+    void recoverTree(TreeNode* root) {
+        rec(root);
+        
+        int temp = ele->val;
+        ele->val = ele2->val;
+        ele2->val = temp;
+    }
+};
