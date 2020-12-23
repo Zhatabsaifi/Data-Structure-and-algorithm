@@ -19,10 +19,9 @@ using namespace std;
 #define N 10 
 int dp[N][N]; 
 
-int findLongest(pair<int, int> a[], int n, 
-                int present, int previous) 
+int findLongest(pair<int, int> a[], int n,  int present, int previous) 
 { 
-    // Base case when it exceeds 
+                                                                // Base case when it exceeds 
     if (present == n) { 
         return 0; 
     } 
@@ -33,13 +32,13 @@ int findLongest(pair<int, int> a[], int n,
 
     int ans = 0; 
   
-    // No elements in subset yet 
+                                                                                                               // No elements in subset yet 
     if (previous == -1) { 
   
-        // First state which includes current index 
-        ans = 1 + findLongest(a, n,   present + 1, present);     // assume present is first state   // +1 include itself
+                                                                    // First state which includes current index 
+        ans = 1 + findLongest(a, n,   present + 1, present);                        // assume present is first state   // +1 include itself
   
-        // Second state which does not include current index 
+                                                                   // Second state which does not include current index 
         ans = max(ans, findLongest(a, n,  present + 1, previous)); 
     } 
     else { 
@@ -69,7 +68,7 @@ int getLongest(pair<int, int> a[], int n)
   
     sort(a, a + n); 
   
-    // Get the answer 
+                                            // Get the answer 
     int ans = findLongest(a, n, 0, -1); 
     return ans; 
 } 
