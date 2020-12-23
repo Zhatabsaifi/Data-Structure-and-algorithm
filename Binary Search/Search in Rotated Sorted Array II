@@ -49,3 +49,49 @@ public:
         return false;
     }
 };
+
+
+
+-------------------------------------------------------------------------------------------
+recurssion
+
+
+AAAAAAAA BBBBBBBBB
+
+either the L to Middle part is sort or MIddle to R part is sort
+
+any part is correctly sorted in array
+
+
+bool recurssion(vector<int>& nums, int target, int l, int r){
+        if(l > r)                                                       // base case
+            return false;
+        
+        int middle = (l + r) / 2;
+        
+        if(nums[middle] == target)                                          // found the target number
+            return true;
+        else if(nums[l] == nums[middle]){                                   // cases like : [1,3,1,1,1]  or {1,1,1,1,1} 
+            return recurssion(nums,target,l,middle - 1) 
+                   || recurssion(nums,target,middle + 1,r);
+        }
+        
+        else if(nums[l] < nums[middle]){                                                // L TO middle array is sorted
+        
+            if(nums[middle] > target && target >= nums[l])                             // target in L to middle 
+                return recurssion(nums,target,l,middle - 1);
+            else
+                return recurssion(nums,target,middle + 1,r);                              // target in middle to r
+        }
+        
+        else{                                                                        // middle to R is sorted
+            if(nums[middle] < target && target <= nums[r])                           // target in middle to r
+                return recurssion(nums,target,middle + 1,r);
+            else                                                                     // target in l to middle 
+                return recurssion(nums,target,l,middle - 1);              
+        }   
+    }
+    
+    bool search(vector<int>& nums, int target) {
+        return recurssion(nums,target,0,nums.size() - 1);
+    }
