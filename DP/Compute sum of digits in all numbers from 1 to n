@@ -32,7 +32,7 @@ sum(99)  = 45 + (10 + 45) + (20 + 45) + ..... (90 + 45)
 sum(999) = sum(99)*10 + 45*100
 
 
-    -------------->>>>>      sum(10d - 1) = sum(10*(d-1) - 1) * 10 + 45*(10d-1)    <<<<<<<<<<<--------------------formaula
+    -------------->>>>>      sum(10^d - 1) = sum(10^(d-1) - 1) * 10 + 45*(10^(d-1) )    <<<<<<<<<<<--------------------formaula
     
     
     time -- O(d)    d = digit in n
@@ -62,7 +62,7 @@ sum(999) = sum(99)*10 + 45*100
         int p = pow(10, digit) ;
         int msd = n/p ;
         
-        return msd*dp[digit] + (msd * (msd-1)/2 )* p  + msd(1 + n%p )   +   solve(n%p );
+        return msd*dp[digit] + (msd * (msd-1)/2 )* p  + msd* (1 + n%p )   +   solve(n%p );
         
         
         //   msd * dp[digit] =   msd   time  1 to pow(10,digit) -1  (99,999,99999 ); 
