@@ -16,8 +16,8 @@ public:
 	    while( count -- && i<n && j<m)      count number of element need to be swap 
 	    {
 	        if(a[i] <= b[j]){
-                 i++;
-          }
+                	 i++;
+          	}
 	        else if(a[i]>=b[j])
 	        {
 	            number_of_swap++;
@@ -26,9 +26,9 @@ public:
 	        
 	    }
 	    
-	    for(i=0;i< number_of_swap ;i++){
-          swap(b[i],a[n-i-1]);
-      }
+	     for(i=0;i< number_of_swap ;i++){
+		   swap(b[i],a[n-i-1]);
+	     }
 	        
 	    sort(a,a+n);   take O(nlogn) time
 	    sort(b,b+m);    take (mlogm) time
