@@ -24,6 +24,18 @@ Input : Given above tree with parent pointer and node 10
 Output : 12
 
 
+
+
+Method 1:
+
+use can use bfs 
+next element of queue is the sibiiing of node
+
+-----------------------------------------------------------------------------
+Method 2:
+use dfs  
+
+
 O(n) time 
 O(1) space    -- only recursion stack use
 
