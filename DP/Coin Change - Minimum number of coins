@@ -1,0 +1,55 @@
+You are given an amount denoted by value. You are also given an array of coins. The array contains the denominations of the give coins. You need to find the minimum
+number of coins to make the change for value using the coins of given denominations. Also, keep in mind that you have infinite supply of the coins.
+
+
+
+-------------------------------------------------------------------------------------------------
+ Time Complexity: O(N*V).
+ Auxiliary Space: O(V)
+
+long long minimumNumberOfCoins(int coins[],int n,int value)
+{
+    // your code here
+    int dp[value + 1];
+    memset(dp,-1,sizeof(dp));
+    dp[0]=0;
+    for(int i=1;i<=value; i++){
+        int mi = INT_MAX;
+        
+        for(int j=0;j<n;j++){
+            if(coins[j]<= i && dp[i-coins[j]] != -1){
+                mi = min(mi , dp[i-coins[j]] +1);
+            }
+        }
+        if(mi == INT_MAX) mi = -1;
+        dp[i] = mi;
+    }
+    return dp[value];
+}
+
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------------------------------
+int minCoins(int coins[], int m, int V) 
+{ 
+   // base case 
+   if (V == 0) return 0; 
+  
+   int res = INT_MAX; 
+   
+   for (int i=0; i<m; i++) 
+   { 
+     if (coins[i] <= V) 
+     { 
+         int sub_res = minCoins(coins, m, V-coins[i]); 
+         
+         if (sub_res != INT_MAX && sub_res + 1 < res) 
+            res = sub_res + 1; 
+     } 
+   } 
+   return res; 
+} 
