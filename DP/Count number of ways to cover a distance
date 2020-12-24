@@ -1,0 +1,95 @@
+A frog jumps either 1, 2, or 3 steps to go to the top. In how many ways can it reach the top
+Given a distance ‘dist, count total number of ways to cover the distance with 1, 2 and 3 steps.
+Examples:
+
+Input: n = 3
+Output: 4
+Explantion:
+Below are the four ways
+ 1 step + 1 step + 1 step
+ 1 step + 2 step
+ 2 step + 1 step
+ 3 step
+
+Input: n = 4
+Output: 7
+Explantion:
+Below are the four ways
+ 1 step + 1 step + 1 step + 1 step
+ 1 step + 2 step + 1 step
+ 2 step + 1 step + 1 step 
+ 1 step + 1 step + 2 step
+ 2 step + 2 step
+ 3 step + 1 step
+ 1 step + 3 step
+ 
+ 
+ ------------------------------------------------------------------------------------------------------------
+ Time Compelxity: O(3n).
+ Space complexity: O(1).
+ 
+ 
+ 
+ int printCountRec(int dist) 
+{ 
+    // Base cases 
+    if (dist<0)      return 0; 
+    if (dist==0)  return 1; 
+  
+    // Recur for all previous 3 and add the results 
+    return printCountRec(dist-1) + 
+           printCountRec(dist-2) + 
+           printCountRec(dist-3); 
+} 
+
+ ------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ ------------------------------------------------------------------------------------------------------------
+ Time Compelxity: O(n).
+ Space complexity: O(n)
+ 
+ 
+ int printCountDP(int dist) 
+{ 
+    int count[dist+1]; 
+    count[0]  = 1,  count[1] = 1,  count[2] = 2; 
+  
+    for (int i=3; i<=dist; i++) 
+       count[i] = count[i-1] + count[i-2] + count[i-3]; 
+  
+    return count[dist]; 
+} 
+ 
+ ------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ ------------------------------------------------------------------------------------------------------------
+ Time Complexity: O(N)
+Space Complexity O(1)
+ 
+ 
+ int countWays(int n) 
+{
+    if (n == 0) 
+        return 1; 
+    if (n <= 2) 
+        return n; 
+
+    int f0 = 1, f1 = 1, f2 = 2, ans; 
+  
+    for (int i = 3; i <= n; i++) { 
+        ans = f0 + f1 + f2; 
+        f0 = f1; 
+        f1 = f2; 
+        f2 = ans; 
+    } 
+
+    return ans; 
+} 
+ 
+ ------------------------------------------------------------------------------------------------------------
