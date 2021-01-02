@@ -1,0 +1,92 @@
+Given a set of numbers, check whether it can be partitioned into two subsets such that the sum of elements in both subsets is same or not.
+
+Example 1:
+Input:
+N = 4
+arr[] = {1,5,11,5}
+Output: YES
+Explanation: There exists two subsets
+such that {1, 5, 5} and {11}.
+
+
+Expected Time Complexity: O(N*S).
+Expected Auxiliary Space: O(N*S) where S is the sum of the given Array.
+
+
+
+bool solve(int arr[],int n){
+  ll sum=0;
+  for(ll i=0;i<n;i++) {           // sum the arrat
+      sum += arr[i];
+  }
+  
+    if(sum&1){                            // if sum is off than not possible to divide in equal part
+      return false;
+    }
+      sum = sum / 2;
+      
+      bool dp[n+1][sum+1];
+      
+      for(ll i=0;i<=n;i++){
+        for(ll j=0;j<=sum;j++){
+          if(j == 0){
+            dp[i][j]=true;
+          }
+          else if( i == 0){
+            dp[i][j] = false;
+          }
+          else{
+            if(arr[i-1] <= sum){
+              dp[i][j] = dp[i-1][j] || dp[i-1][j-arr[i-1]];
+            }
+            else{
+              dp[i][j] = dp[i-1][j];
+            }
+          }
+        }
+      }
+    return dp[n][sum]
+}
+
+
+-----------------------------------------------------------------------------------
+
+Expected Time Complexity: O(N*S).
+Expected Auxiliary Space: O(2*S) where S is the sum of the given Array.
+
+
+bool solve(int arr[],int n){
+  ll sum=0;
+  for(ll i=0;i<n;i++) {           // sum the arrat
+      sum += arr[i];
+  }
+  
+    if(sum&1){                            // if sum is off than not possible to divide in equal part
+      return false;
+    }
+      sum = sum / 2;
+      
+      sum/=2;
+        bool dp[2][sum+1];
+        memset(dp,false, sizeof(dp));
+        
+        for (int i = 0; i <= n; i++) { 
+        for (int j = 0; j <= sum; j++) { 
+   
+            if (j == 0) {
+                dp[i % 2][j] = true;   
+            }
+            else if (i == 0) {
+                dp[i % 2][j] = false;  
+            }
+            else if (arr[i - 1] <= j) {
+                dp[i % 2][j] = dp[(i + 1) % 2][j - arr[i - 1]] || dp[(i + 1) % 2][j]; 
+           }
+           else{
+                dp[i % 2][j] = dp[(i + 1) % 2][j]; 
+           }
+        } 
+    } 
+  
+    return dp[n % 2][sum]; 
+}
