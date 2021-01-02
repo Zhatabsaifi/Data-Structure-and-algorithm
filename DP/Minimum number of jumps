@@ -1,0 +1,47 @@
+Given an array of integers where each element represents the max number of steps that can be made forward from that element. The task is to find the minimum number 
+of jumps to reach the end of the array (starting from the first element). If an element is 0, then cannot move through that element.
+
+Example 1:
+Input:
+N = 11
+a[] = {1,3,5,8,9,2,6,7,6,8,9}
+Output: 3
+Explanation: First jump from 1st element,
+and we jump to 2nd element with value 3.
+Now, from here we jump to 5h element with
+value 9. and from here we will jump to
+last.
+
+Expected Time Complexity : O(N)
+Expected Auxiliary Space: O(N)
+
+
+int minimumJumps(int arr[], int n){
+    if(n <= 1){
+         return 0;
+    }
+    
+    int jump = arr[0];                      // initilaize jump take
+    
+    if(jump == 0){
+         return -1;
+    }
+    
+    int i=1 ,cnt=1 , ma = arr[0];
+    for(i =1; i< n; i++){
+       if(i == n-1){
+            return  cnt;
+       }
+       
+       ma = max( ma , i + arr[i] );
+       jump--;                                      //jump 1 1 step 
+       if(jump == 0){                     // all jump finish and choice the maximum jump take after finish previous
+           cnt++;
+           if(ma == i){                       // not any present who can jump next after i   
+                 return -1;
+           }
+           jump = ma-i;
+       }
+    }
+    return -1;
+}
