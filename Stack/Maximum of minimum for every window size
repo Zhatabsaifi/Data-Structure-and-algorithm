@@ -1,0 +1,111 @@
+Given an integer array. The task is to find the maximum of the minimum of every window size in the array.
+Note: Window size varies from 1 to the size of the Array.
+
+Example 1:
+
+Input:
+N = 7
+A[] = {10,20,30,50,10,70,30}
+Output: 70 30 20 10 10 10 10 
+Explanation: First element in output indicates maximum of minimums of all windows of size 1. Minimums of windows of size 1 are {10}, {20}, {30}, {50},
+{10}, {70} and {30}. Maximum of these minimums is 70. 
+Second element in output indicates maximum of minimums of all windows ofsize 2. Minimums of windows of size 2 are {10}, {20}, {30}, {10}, {10}, and
+{30}. Maximum of these minimums is 30  Third element in output indicates maximum of minimums of all windows of size 3. Minimums of windows of size 3
+are {10}, {20}, {10}, {10} and {10}. Maximum of these minimums is 20.  Similarly other elements of output are computed.
+
+
+Example 2:
+Input:
+N = 3
+A[] = {10,20,30}
+Output: 30 20 10
+Explanation: First element in output indicates maximum of minimums of all windows of size 1.Minimums of windows of size 1 are {10} , {20} , {30}.
+Maximum of these minimums are 30 and similarly other outputs can be computed
+
+
+
+1) method
+time - O(n*n*n)
+space - O(1)
+
+void printMaxOfMin(int arr[], int n) 
+{ 
+                                                        // Consider all windows of different  sizes starting from size 1 
+    for (int k=1; k<=n; k++) 
+    { 
+                                                           // Initialize max of min for current window size k 
+        int maxOfMin = INT_MIN; 
+  
+                                                            // Traverse through all windows of current size k 
+        for (int i = 0; i <= n-k; i++) 
+        { 
+            // Find minimum of current window 
+            int min = arr[i]; 
+            for (int j = 1; j < k; j++) 
+            { 
+                if (arr[i+j] < min) 
+                    min = arr[i+j]; 
+            } 
+  
+                                                                // Update maxOfMin if required 
+            if (min > maxOfMin) 
+              maxOfMin = min; 
+        } 
+  
+                                                    // Print max of min for current window size 
+        cout << maxOfMin << " "; 
+    } 
+} 
+
+
+2) method
+ Time Complxity : O(N)
+ Auxilliary Space : O(N)
+
+
+void solve(){
+    int n;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++) cin>>arr[i];
+    
+    vector<int> left(n+1 , -1) , right(n+1 , n);
+    
+    stack<int> s;
+    
+    for(int i=0;i<n;i++){                             // right maximum element find 
+        while(!s.empty() && arr[s.top()] >= arr[i]) {
+            s.pop();
+        }
+        
+        if(!s.empty(){
+             left[i] = s.top();
+        }
+        s.push(i);
+    }
+    while(!s.empty()){                        // empty stack
+         s.pop();
+    }
+    
+    for(int i=n-1;i>=0;i--){                          // left maximum find
+        while(!s.empty() && arr[s.top()] >= arr[i]{
+             s.pop();
+        }
+        
+        if(!s.empty()) {
+            right[i] = s.top();
+        }
+        s.push(i);
+    }
+    vector<int> ans(n+1 , 0);
+    for(int i=0;i<n;i++){
+        int len = right[i] - left[i] -1;
+        ans[len] = max(ans[len] , arr[i]);
+    }
+   for (int i=n-1; i>=1; i--) {
+        ans[i] = max(ans[i], ans[i+1]); 
+   }
+        
+    for(int i=1;i<=n;i++) cout<<ans[i]<<" ";
+    cout<<endl;
+}
