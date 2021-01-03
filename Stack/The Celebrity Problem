@@ -1,0 +1,126 @@
+In a party of N people, only one person is known to everyone. Such a person may be present in the party, if yes, (s)he doesn’t know anyone in the party. 
+We can only ask questions like “does A know B? “. Find the stranger (celebrity) in the minimum number of questions.
+
+We can describe the problem input as an array of numbers/characters representing persons in the party. We also have a hypothetical function HaveAcquaintance(A, B) 
+which returns true if A knows B, false otherwise. How can we solve the problem. 
+
+
+Example 1:
+Input:
+N = 3
+M[][] = {{0 1 0},
+         {0 0 0}, 
+         {0 1 0}}
+Output: 1
+Explanation: 0th and 2nd person both
+know 1. Therefore, 1 is the celebrity. 
+
+Example 2:
+Input:
+N = 2
+M[][] = {{0 1},
+         {1 0}}
+Output: -1
+Explanation: The two people at the party both
+know each other. None of them is a celebrity.
+
+
+---------------------------------------------------------------------------------
+Time Complexity: O(n*n). 
+Space Complexity: O(n). 
+
+#define N 8 
+
+bool MATRIX[N][N] = {{0, 0, 1, 0}, 
+                    {0, 0, 1, 0}, 
+                    {0, 0, 0, 0}, 
+                    {0, 0, 1, 0}}; 
+   
+bool knows(int a, int b) 
+{ 
+    return MATRIX[a][b]; 
+} 
+
+int findCelebrity(int n) 
+{ 
+    int indegree[n]={0},outdegree[n]={0}; 
+      
+    for(int i=0; i<n; i++) 
+    { 
+        for(int j=0; j<n; j++) 
+        { 
+            int x = knows(i,j); 
+     
+            outdegree[i] += x; 
+            indegree[j] += x; 
+        } 
+    } 
+      
+    for(int i=0; i<n; i++){ 
+        if(indegree[i] == n-1 && outdegree[i] == 0){ 
+            return i; 
+        }
+    }
+      
+    return -1; 
+} 
+   
+// Driver code 
+int main() 
+{ 
+    int n = 4; 
+    int id = findCelebrity(n); 
+    id == -1 ? cout << "No celebrity" :   cout << "Celebrity ID " << id; 
+    return 0; 
+} 
+
+-------------------------------------------------------------------------------------
+
+
+
+
+2) method
+
+class Solution {
+    public:
+    int celebrity(vector<vector<int> >& a, int n) {
+        int c=0;
+        for(int i=0;i<n;i++){
+            if(a[c][i]==1) c=i;
+        }
+        for(int i=0;i<n;i++){
+            if(i!=c &&(a[i][c]==0 || a[c][i]==1)){
+                c=-1;
+            }
+        }
+        return c;
+    }
+};
+
+
+3) method
+
+
+int getId(int M[MAX][MAX], int n)
+{
+    int a=0,b=n-1;
+    
+    while(a < b){
+        if(M[a][b]){
+            a++;
+        }
+        else{
+            b--;
+        }
+    }
+    
+    for(int i=0;i<n;i++){
+        if(i != a){
+            if(M[a][i]==1 || M[i][a] == 0){
+                return -1;
+            }
+        }
+    }
+    return a;
+}
+
