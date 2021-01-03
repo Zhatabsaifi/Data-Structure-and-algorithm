@@ -1,0 +1,52 @@
+Given string exp representing a postfix expression, the task is to evaluate the expression and find the final value.
+Operators will only include the basic arithmetic operators like *, /, + and -.
+
+ 
+
+Example 1:
+
+Input: str = "231*+9-"
+Output: -4
+Explanation:
+After solving the given expression, 
+we have -4 as result.
+
+Expected Time Complexity: O(|exp|)
+Expected Auixilliary Space: O(|exp|)
+
+
+int evaluatePostfix(string &str)
+{
+    int n = str.length();
+    stack<int> s;
+    
+    for(int i=0;i<n;i++){
+        if(str[i] >= '0' && str[i] <= '9'){
+            s.push(str[i]-'0');
+        }else{
+            int t1 = s.top();
+            s.pop();
+            
+            int t2 = s.top();
+            s.pop();
+            
+            switch(str[i]){
+                case '+' : s.push(t2+t1);
+                            break;
+                            
+                case '-':   s.push(t2-t1);
+                            break;
+                            
+                case '*':   s.push(t2*t1); 
+                            break;
+                            
+                case '/':   s.push(t2/t1); 
+                            break;
+                            
+                case '^':   s.push(t2^t1); 
+                            break;
+            }
+        }
+    }
+    return s.top();
+}
