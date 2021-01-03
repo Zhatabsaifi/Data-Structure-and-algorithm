@@ -1,0 +1,39 @@
+Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
+
+Find the largest rectangular area possible in a given histogram where the largest rectangle can be made of a number of contiguous bars. For simplicity, 
+assume that all bars have same width and the width is 1 unit.
+
+For example, consider the following histogram with 7 bars of heights {6, 2, 5, 4, 5, 1, 6}. The largest possible rectangle possible is 12 (see the below figure,
+the max area rectangle is highlighted in red)
+
+
+
+int histogram(vector<int> &vec){
+        int n = vec.size();
+        int ans=0;
+        stack<int> s;
+        
+        for(int i=0;i<n;i++){
+            if(s.empty() || vec[s.top()] <= vec[i]){
+                s.push(i);
+            }
+            else{
+                while(!s.empty() && vec[s.top()] > vec[i]){
+                    int pt = s.top();
+                    s.pop();
+                    int ma = vec[pt] * (s.empty() ?i : i-s.top()-1);               // main logic
+                    
+                    ans = max(ans,ma);
+                }
+                s.push(i);
+            }
+        }
+        
+        while(!s.empty()){
+            int pt = s.top(); 
+            s.pop();
+            int ma = vec[pt] * (s.empty() ? n : n-s.top()-1);                   // main logic
+            ans = max(ans,ma);
+        }
+        return ans;
+    }
