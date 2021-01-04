@@ -1,0 +1,124 @@
+Given the binary Tree of and two-node values. Check whether the two-node values are cousins of each other or not.
+
+Example 1:
+
+Input:
+      1
+    /   \
+   2     3
+a = 2, b = 3
+Output: 0
+
+Example 2:
+
+Input:
+       1
+     /   \ 
+    2     3
+   /       \
+  5         4 
+a = 5, b = 4
+Output: 1
+Explanation: Here, nodes 5 and 4 are
+at the same level and have different
+parent nodes. Hence, they both are cousins 
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(Height of the Tree)
+
+
+1) method
+
+bool isCousins(Node *root, int a, int b)
+{
+   if (root == NULL) 
+        return false; 
+        
+    Node* parA = NULL; 
+    Node* parB = NULL; 
+  
+
+    queue<pair<Node*, Node*> > q;             // { node, parent node} 
+
+    Node* tmp = new Node(-1); 
+  
+    pair<Node*, Node*> ele; 
+  
+    q.push(make_pair(root, tmp)); 
+    int levSize; 
+  
+    while (!q.empty()) { 
+  
+        levSize = q.size(); 
+        while (levSize) { 
+  
+            ele = q.front(); 
+            q.pop(); 
+            
+            if (ele.first->data == a) { 
+                parA = ele.second; 
+            } 
+  
+            if (ele.first->data == b) { 
+                parB = ele.second; 
+            } 
+   
+            if (ele.first->left) { 
+                q.push(make_pair(ele.first->left, ele.first)); 
+            } 
+  
+            if (ele.first->right) { 
+                q.push(make_pair(ele.first->right, ele.first)); 
+            } 
+  
+            levSize--; 
+  
+ 
+            if (parA && parB) 
+                break; 
+        } 
+        if (parA && parB) { 
+            return parA != parB; 
+        } 
+ 
+        if ( parA == NULL || parB == NULL ) { 
+            return false; 
+        } 
+    } 
+  
+    return false; 
+}
+
+
+2) method
+
+
+int isSibling(struct Node *root, struct Node *a, struct Node *b) 
+{ 
+    // Base case 
+    if (root==NULL)  return 0; 
+  
+    return ((root->left==a && root->right==b)|| 
+            (root->left==b && root->right==a)|| 
+            isSibling(root->left, a, b)|| 
+            isSibling(root->right, a, b)); 
+} 
+  
+int level(struct Node *root, struct Node *ptr, int lev) 
+{ 
+    // base cases 
+    if (root == NULL) return 0; 
+    if (root == ptr)  return lev; 
+  
+    int l = level(root->left, ptr, lev+1); 
+    if (l != 0)  return l; 
+ 
+    return level(root->right, ptr, lev+1); 
+} 
+ 
+int isCousin(struct Node *root, struct Node *a, struct Node *b) 
+{ 
+    if ((level(root,a,1) == level(root,b,1)) && !(isSibling(root,a,b))) 
+        return 1; 
+    else return 0; 
+} 
