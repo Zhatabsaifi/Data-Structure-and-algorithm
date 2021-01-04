@@ -1,0 +1,41 @@
+Return any binary tree that matches the given preorder and postorder traversals.
+
+Values in the traversals pre and post are distinct positive integers.
+
+ 
+
+Example 1:
+
+Input: pre = [1,2,4,5,3,6,7], post = [4,5,2,6,7,3,1]
+Output: [1,2,3,4,5,6,7]
+
+
+class Solution {
+public:
+    vector<int> pree , pos ;
+    
+    TreeNode* rec(int st,int end , int size){
+        if(size == 0) return NULL;
+        
+        TreeNode* root = new TreeNode(pree[st]);
+        
+        if(size == 1) return root;
+           
+        int part = 0;
+        for(int i=0;i<size;i++){
+            if(pos[i + end] == pree[st+1]){
+                part = i+1;
+                break;
+            }
+        }
+        
+        root->left = rec(st+1, end, part);
+        root->right = rec(st+part +1 , end +part , size-1-part);
+        return root;
+    }
+    
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        pree = pre;  pos = post;
+        return rec(0,0,pre.size());
+    }
+};
