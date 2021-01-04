@@ -1,0 +1,56 @@
+Given A binary Tree. Your task is to remove all the half nodes (which has only one child).
+
+Example 1:
+
+Input:
+         7
+       /   \
+      7     8
+     / 
+    2
+Output: 2 7 8 
+Example 2:
+
+Input:
+         2
+       /   \
+      7     5
+       \      \
+        9      1
+       /  \
+      11   4
+Output: 1 6 11 2 4
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(Height of the Binary Tree).
+
+
+
+// Return the root of the modified tree after removing all the half nodes.
+Node *RemoveHalfNodes(Node *root)
+{
+   if(root == NULL) {
+      return root;
+   }
+   
+   root->left = RemoveHalfNodes(root->left);
+   root->right = RemoveHalfNodes(root->right);
+   
+   if(root ->left == NULL && root->right == NULL){
+        return root;
+   }
+   
+    if(root->left == NULL || root->right == NULL){
+        if(root->right == NULL) {
+            return root->left;
+        }
+        else if(root->left == NULL) {
+            return root->right;
+        }
+        else{
+             return NULL;
+        }
+    }
+  
+   return root;
+}
