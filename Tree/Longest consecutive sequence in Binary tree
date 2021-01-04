@@ -1,0 +1,60 @@
+Given a Binary Tree find the length of the longest path which comprises of connected nodes with consecutive values in increasing order. 
+
+ 
+
+Example 1:
+
+Input :      
+           1                               
+         /   \                          
+        2     3                      
+
+Output: 2
+
+Explanation : Longest sequence is 1, 2.
+
+ 
+
+Example 2:
+
+Input :    
+            10                               
+         /     \                          
+       20       30                      
+      /  \      /
+     40      60   90    
+
+Output :  -1
+
+Explanation: For the above test case no 
+sequence is possible. So output is -1.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(Height of Tree)
+
+
+
+void rec(Node* root,int len,  int &ma , int expect){
+    if(root == NULL){
+        return ;
+    }
+    if(root->data == expect){
+        len++;
+    }else{
+        len = 1;
+    }
+    
+    ma = max(ma, len);
+    
+    rec(root->left , len,ma,root->data +1);
+    rec(root->right , len,ma,root->data +1);
+}
+int longestConsecutive(Node* root)
+{
+     //Code here
+     int ma= 0;
+     rec(root,0,ma, root->data);
+     if(ma == 1) ma = -1;
+     return ma;
+}
