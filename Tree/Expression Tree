@@ -1,0 +1,41 @@
+Given a full binary expression tree consisting of basic binary operators (+ , – ,*, /) and some integers, Your task is to evaluate the expression tree.
+
+Example 1:
+
+Input: 
+              +
+           /     \
+          *       -
+        /  \    /   \
+       5    4  100  20 
+
+Output: 100
+
+Explanation:
+((5 * 4) + (100 - 20)) = 100
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(height of tree)
+
+
+int evalTree(node* root) {
+    if(root ==NULL){
+         return 0;
+    }
+    
+    if(root->left == NULL && root->right == NULL){      // leave node
+        return stoi(root->data);                      // convert string to int
+    }
+    
+    int left = evalTree(root->left);
+    int rig= evalTree(root->right);
+    
+    int sum =0;
+    
+    if(root->data == "+") sum = left+rig;
+    else if(root->data == "-") sum = left-rig;
+    else if(root->data == "*") sum = left*rig;
+    else if(root->data == "/" ) sum = left/rig;
+   
+    return sum;
+}
