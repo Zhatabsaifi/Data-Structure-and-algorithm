@@ -1,0 +1,103 @@
+You are given a Double Link List with one pointer of each node pointing to the next node just like in a single link list. The second pointer however CAN point 
+to any node in the list and not just the previous node. Now write a program in O(n) time to duplicate this list. That is, write a program which will create a 
+copy of this list.
+
+
+1) method
+
+1) Create all nodes in copy linked list using next pointers.
+2) Store the node and its next pointer mappings of original linked list.
+3) Change next pointer of all nodes in original linked list to point to the corresponding node in copy linked list.
+4) Change the arbit pointer of all nodes in copy linked list to point to corresponding node in original linked list.
+5) Now construct the arbit pointer in copy linked list as below and restore the next pointer of nodes in the original linked list.
+6) Restore the next pointers in original linked list from the stored mappings(in step 2).
+
+use extra space
+
+class Solution {
+public:
+    unordered_map<Node* , int > mp;
+    unordered_map<int , Node* > ch;
+    Node* copyRandomList(Node* head) {
+        mp.clear();
+        ch.clear();
+        
+       Node* root=head;
+        Node* ret=NULL ,* prev=NULL;
+        if(head == NULL) return ret;
+       
+        int cnt=0;
+        while(head != NULL){
+            Node* temp = new Node(head->val);
+            mp[head] = cnt;
+            ch[cnt] = temp;
+            cnt++;
+            
+            if(ret == NULL){
+                ret = temp;
+                prev = temp;
+            }else{
+                prev->next = temp;
+                prev = prev->next;
+            }
+            head  =head->next;
+        }
+        
+        while(root != NULL){
+            if(root ->random != NULL){
+                 int num = mp[root] , des = mp[root->random];
+                ch[num]->random = ch[des];
+            }
+            root = root->next;
+        }
+        return ret;
+    }
+};
+
+
+2) method
+
+space - O(1) 
+
+
+https://www.geeksforgeeks.org/clone-linked-list-next-random-pointer-o1-space/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+       Node* cur = head;
+        if(!head) return NULL;
+        
+        while(cur ){
+            Node* ch = new Node(cur->val);   // insert value
+            ch->next = cur->next;
+            cur->next = ch;
+            cur = cur->next->next;
+        }
+        
+        cur= head;
+        while(cur){   // insert random
+            if(cur->random == NULL){
+                cur->next->random = NULL;
+            }else{
+                cur->next->random = cur->random->next;
+            }
+            cur = cur->next->next;
+        }
+        cur=head;
+        while(cur){
+            cout<<cur->val<<"-->";   cur=cur->next;
+        }
+        cur=head;
+        Node* root=cur->next,*temp=root;
+        while(cur){
+          cur->next = temp->next;
+            cur = cur->next;
+            
+            if(temp->next == NULL) break;
+            temp->next = temp->next->next;
+            temp =temp->next;
+        }
+        return root;
+    }
+};
