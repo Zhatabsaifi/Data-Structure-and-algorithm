@@ -1,0 +1,41 @@
+Array preLN[] has only two possible values ‘L’ and ‘N’. The value ‘L’ in preLN[] indicates that the corresponding node in Binary Tree is a leaf node and value ‘N’
+indicates that the corresponding node is a non-leaf node.
+
+Note: Every node in the binary tree has either 0 or 2 children.
+
+Example 1:
+
+Input :      
+N = 5
+pre[] = {10, 30, 20, 5, 15}
+preLN[] = {N, N, L, L, L}
+
+Output:
+          10
+        /    \
+      30      15
+     /  \     
+   20    5   
+   
+   
+ struct Node *rec(int pre[],char preLN[] ,int n,int &ind){
+    if(ind == n) return NULL;
+    Node* root = new Node(pre[ind]);
+   
+    if(preLN[ind] == 'L'){
+        ind++;
+        return root;
+    }
+    if(preLN[ind] == 'N' && ind <n-1){
+         ind++;
+        root->left = rec(pre,preLN,n,ind);
+        root->right = rec(pre,preLN,n,ind);
+    }
+    return root;
+}
+
+struct Node *constructTree(int n, int pre[], char preLN[])
+{
+    int ind=0;
+    return rec(pre,preLN, n ,ind);
+}
