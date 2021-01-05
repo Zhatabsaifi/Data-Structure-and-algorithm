@@ -1,0 +1,104 @@
+Given a AVL tree and N values to be inserted in the tree. Write a function to insert a given value into the tree.
+
+Example 1:
+
+â€‹N = 3
+Values to be inserted = {5,1,4}
+
+Input:      
+Value to be inserted = 5
+Output:
+    5
+
+Input :      
+Value to be inserted = 1
+Output:
+    5
+   /
+  1
+
+â€‹Input :      
+Value to be inserted = 4
+Output:
+    4
+   / \
+  1   5
+  
+  
+  
+  int height(Node* root){
+    if(root == NULL) return 0;
+    return root->height;
+}
+int getBalance(Node* root){
+    if(!root) return 0;
+    return height(root->left) - height(root->right);
+}
+
+Node* rightRotate(Node* y){
+    Node* x = y->left;
+    Node* t = x->right;
+    
+    x->right = y;
+    y->left = t;
+    
+    y->height = max( height(y->left) , height(y->right) ) +1;
+    
+    x->height = max( height(x->left) , height(x->right) ) +1;
+    return x;
+}
+
+Node *leftRotate(Node *x)  
+{  
+    Node *y = x->right;  
+    Node *T2 = y->left;  
+  
+    y->left = x;  
+    x->right = T2;  
+  
+    // Update heights  
+    x->height = max(height(x->left), height(x->right)) + 1;  
+    y->height = max(height(y->left),  height(y->right)) + 1;  
+  
+    // Return new root  
+    return y;  
+}  
+  
+
+Node* insertToAVL(Node* node, int key)
+{
+    if (node == NULL)  
+        return(new Node(key));  
+  
+    if (key < node->data)  
+        node->left = insertToAVL(node->left, key);  
+    else if (key > node->data)  
+        node->right = insertToAVL(node->right, key);  
+    else
+        return node;  
+        
+    node->height = 1 + max(height(node->left),  height(node->right));  
+  
+    int balance = getBalance(node);  
+  
+    // Left Left Case  
+    if (balance > 1 && key < node->left->data)  
+        return rightRotate(node);  
+  
+    // Right Right Case  
+    if (balance < -1 && key > node->right->data)  
+        return leftRotate(node);  
+  
+    // Left Right Case  
+    if (balance > 1 && key > node->left->data)  {  
+        node->left = leftRotate(node->left);  
+        return rightRotate(node);  
+    }  
+  
+    // Right Left Case  
+    if (balance < -1 && key < node->right->data)  {  
+        node->right = rightRotate(node->right);  
+        return leftRotate(node);  
+    }  
+    return node;
+}
