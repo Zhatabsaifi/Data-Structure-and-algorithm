@@ -1,0 +1,107 @@
+Given a binary tree and a leaf node called target. Find the minimum time required to burn the complete binary tree if the target is set on fire. 
+It is known that in 1 second all nodes connected to a given node get burned. That is, its left child, right child and parent.
+
+
+Input :      
+          1
+        /   \
+      2      3
+    /  \      \
+   4    5      6
+       / \      \
+      7   8      9
+                   \
+                   10
+
+Target Node = 8
+
+Output: 7
+
+Explanation: If leaf with the value 
+8 is set on fire. 
+After 1 sec: 5 is set on fire.
+After 2 sec: 2, 7 are set to fire.
+After 3 sec: 4, 1 are set to fire.
+After 4 sec: 3 is set to fire.
+After 5 sec: 6 is set to fire.
+After 6 sec: 9 is set to fire.
+After 7 sec: 10 is set to fire.
+It takes 7s to burn the complete tree.
+
+Example 2:
+
+Input :      
+          1
+        /   \
+      2      3
+    /  \      \
+   4    5      7
+  /    / 
+ 8    10
+
+Target Node = 10
+
+Output: 5
+
+
+
+int ans=0;
+int rec(Node* root, int tar , queue<Node*> &q){
+    if(root == NULL) return 0;
+    
+    if(root->data == tar){
+        ans++;
+        if(root->left) q.push(root->left);
+        if(root->right) q.push(root->right);
+        return 1;
+    }
+    
+    int a = rec(root->left , tar,q);
+    if(a==1){
+        int n = q.size();
+        ans++;
+        while(n--){
+            Node* temp = q.front();
+            q.pop();
+            if(temp->left) q.push(temp->left);
+            if(temp->right) q.push(temp->right);
+        }
+        if(root->right) q.push(root->right);
+        return 1;
+    }
+    
+    int b= rec(root->right,tar,q);
+    if(b==1){
+        int n = q.size();
+        ans++;
+         while(n--){
+            Node* temp = q.front();
+            q.pop();
+            if(temp->left) q.push(temp->left);
+            if(temp->right) q.push(temp->right);
+        }
+        if(root->left) q.push(root->left);
+        return 1;
+    }
+    return 0;
+}
+int minTime(Node* root, int target) 
+{
+    // Your code goes here
+    ans  =0 ;
+    queue<Node*> q;
+    rec(root,target , q);
+    
+    while(!q.empty()){
+        int n = q.size();
+        while(n--){
+            Node* temp = q.front();
+            q.pop();
+            if(temp->left) q.push(temp->left);
+            if(temp->right) q.push(temp->right);
+        }
+        
+        ans++;
+    }
+    return ans-1;
+}
