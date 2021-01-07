@@ -1,0 +1,141 @@
+Given an array of size N that can be used to represents a tree. The array indexes are values in tree nodes and array values give the parent node of that particular index (or node). The value of the root node index would always be -1 as there is no parent for root. Construct the standard linked representation of Binary Tree from this array representation.
+
+ 
+
+Example 1:
+
+Input:
+N = 7
+parent[] = {-1,0,0,1,1,3,5}
+Output: 0 1 2 3 4 5 6
+Explanation: the tree generated
+will have a sturcture like 
+          0
+        /   \
+       1     2
+      / \
+     3   4
+    /
+   5
+ /
+6
+ 
+
+Example 2:
+
+Input:
+N = 3
+parent[] = {2, 0, -1}
+Output: 2 0 1
+Explanation: the tree generated will
+have a sturcture like
+               2
+             /   
+            0      
+          /   
+         1    
+         
+         
+         
+  Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+1) method
+
+void rec(int parent[] , vector<Node*> &cre,int node){
+    if(parent[node] == -1) return ;
+    
+    if(cre[node] != NULL) return ;                          // already make this node
+    
+    cre[node] = new Node(node);
+    
+    if(cre[ parent[node] ]  == NULL){
+        rec(parent , cre, parent[node]);
+    }
+    
+    Node* p = cre[ parent[node] ];
+    
+    if(p->left == NULL){
+         p->left = cre[node];
+    }
+    else{
+        p->right = cre[node];
+    }
+}
+
+Node *createTree(int parent[], int n)
+{
+    vector<Node*> cre(n,NULL);
+    Node* root= NULL;
+    
+    for(int i=0;i<n;i++){                           // find root node
+        if(parent[i] == -1){
+            cre[i] = new Node(i);
+            root = cre[i];
+            break;
+        }
+    }
+    
+    for(int i=0;i<n;i++){
+        rec(parent , cre , i );
+    }
+    return root;
+}
+
+
+2) method
+
+Node* createTree(int parent[], int n) 
+{ 
+                                                               // A map to keep track of all the nodes created. Key: node value; Value: Pointer to that Node 
+    map<int, Node*> m; 
+    Node *root, *temp; 
+    int i; 
+  
+                                                              // Iterate for all elements of the parent array. 
+    for (i = 0; i < n; i++) { 
+  
+                                                                 // Node i does not exist in the map 
+        if (m.find(i) == m.end()) { 
+  
+                                                                     // Create a new node for the current index 
+            temp = newNode(i); 
+  
+                                                                     // Entry of the node in the map with key as i and value as temp 
+            m[i] = temp; 
+        } 
+  
+                                                                 // If parent is -1 Current node i is the root So mark it as the root of the tree 
+        if (parent[i] == -1) 
+            root = m[i]; 
+  
+                                                                  // Current node is not root and parent of that node is not created yet 
+        else if (m.find(parent[i]) == m.end()) { 
+  
+                                                                     // Create the parent 
+            temp = newNode(parent[i]); 
+  
+                                                                     // Assign the node as the left child of the parent 
+            temp->left = m[i]; 
+  
+                                                                      // Entry of parent in map 
+            m[parent[i]] = temp; 
+        } 
+  
+                                                                  // Current node is not root and parent  of that node is already created 
+        else { 
+  
+                                                                      // Left child of the parent doesn't exist 
+            if (m[parent[i]]->left == NULL){
+                m[parent[i]]->left = m[i]; 
+                
+             }
+  
+                                                                      // Right child of the parent doesn't exist 
+            else{
+                m[parent[i]]->right = m[i]; 
+            }
+        } 
+    } 
+    return root; 
+} 
