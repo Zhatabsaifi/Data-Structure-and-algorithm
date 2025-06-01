@@ -51,3 +51,6 @@ https://www.ucd.ie/professionalacademy/resources/career-advice/star-interview-te
 
 Prep:
 https://www.linkedin.com/posts/karan-saxena-466b07190_acing-during-coding-interviews-knowing-activity-7323571815287586816-uxl-?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkh8hMB7VYooXM8KP07LrgESK0wgUFrCAc
+
+https://dev.to/avinash201199/crack-the-google-interview-in-2025-your-complete-preparation-guide-4bek
+https://igotanoffer.com/blogs/tech/google-interview-questions
